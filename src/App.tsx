@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import News from "./pages/news";
-import "./App.css";
+import News from "pages/News";
+import "App.css";
 
 function App() {
   return (

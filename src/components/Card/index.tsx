@@ -5,7 +5,6 @@ type Props = {
   title: string;
   description: string;
   author: string;
-  category: string;
   date: Date;
   source: string;
   url: string;
@@ -21,7 +20,6 @@ function Card({
   title,
   description,
   author,
-  category,
   date,
   source,
   url,
@@ -59,12 +57,6 @@ function Card({
               <Icon type="Globe" />
             </span>{" "}
             {source}
-          </p>
-          <p className={classNames.titleWithIcon}>
-            <span className={classNames.icons}>
-              <Icon type="Category" />
-            </span>{" "}
-            {category}
           </p>
         </div>
       </div>

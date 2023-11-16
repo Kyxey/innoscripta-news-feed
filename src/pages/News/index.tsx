@@ -12,7 +12,19 @@ function News() {
     if (news.length > 0) {
       return news.map((newsItem) => {
         // TODO:
-        return <Card />;
+        newsItem;
+        return (
+          <Card
+            imageLink="https://picsum.photos/800"
+            title="News 1"
+            url="https://google.com"
+            description="This is the full description."
+            author="Ali Azizjahan"
+            date={new Date()}
+            category="Horror"
+            source="KYXEY News"
+          />
+        );
       });
     }
     return null;
@@ -42,9 +54,15 @@ function News() {
   };
 
   return (
-    <div>
+    <div className="w-full h-full">
       <Header />
-      {processResult(newsQueryResult)}
+      <section className="grid grid-cols-1 grids-rows-3 lg:grid-cols-3 pt-28">
+        <div></div>
+        <div className="flex flex-col space-y-4">
+          {processResult(newsQueryResult)}
+        </div>
+        <div></div>
+      </section>
     </div>
   );
 }

@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import News from "pages/News";
+import NotFound from "pages/NotFound";
 import "App.css";
 
 function App() {
@@ -10,6 +11,10 @@ function App() {
           <Route
             path="/"
             Component={News}
+          />
+          <Route
+            path="*"
+            Component={NotFound}
           />
         </Routes>
       </BrowserRouter>

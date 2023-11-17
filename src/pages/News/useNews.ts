@@ -1,3 +1,4 @@
+import type { KeyboardEvent } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { newsSources } from "const/news";
 import axios from "axios";
@@ -41,10 +42,56 @@ function useNews() {
           total: 0,
         }
   );
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [searchQueryForKey, setSearchQueryForKey] = useState<string>("");
   const [enabledSources, setEnabledSources] = useState<string[]>(
     enabledSourcesInStorage ? JSON.parse(enabledSourcesInStorage) : []
   );
+  const fetchSources = () => {
+    const newsSource = newsSources["NewsAPI"];
+    return axios
+      .get(
+        `${newsSource.url}sources?country=us&language=en&apiKey=${newsSource.apiKey}`
+      )
+      .then((result) => {
+        if (result.status == 200) {
+          const fetchedSources: Source[] = result.data.sources.map(
+            (sourceData: { id: string; name: string }) => {
+              return {
+                id: sourceData.id,
+                name: sourceData.name,
+              };
+            }
+          );
+
+          if (!enabledSourcesInStorage) {
+            const newEnabledSources = fetchedSources.map((fetchedSource) => {
+              return fetchedSource.id;
+            });
+            if (newEnabledSources && newEnabledSources.length > 0) {
+              localStorage.setItem(
+                enabledSourcesStorageKey,
+                JSON.stringify(newEnabledSources)
+              );
+            }
+          }
+
+          return fetchedSources;
+        }
+
+        return [];
+      });
+  };
   const fetchNews = () => {
+    if (enabledSources.length == 0) {
+      setQueryStatus({
+        ...queryStatus,
+        page: 1,
+        total: 0,
+      });
+      return [];
+    }
+
     const newsSource = newsSources["NewsAPI"];
     return axios
       .get(
@@ -94,50 +141,15 @@ function useNews() {
       });
   };
 
-  const fetchSources = () => {
-    const newsSource = newsSources["NewsAPI"];
-    return axios
-      .get(
-        `${newsSource.url}sources?country=us&language=en&apiKey=${newsSource.apiKey}`
-      )
-      .then((result) => {
-        if (result.status == 200) {
-          const fetchedSources: Source[] = result.data.sources.map(
-            (sourceData: { id: string; name: string }) => {
-              return {
-                id: sourceData.id,
-                name: sourceData.name,
-              };
-            }
-          );
-
-          if (!enabledSourcesInStorage) {
-            const newEnabledSources = fetchedSources.map((fetchedSource) => {
-              return fetchedSource.id;
-            });
-            if (newEnabledSources && newEnabledSources.length > 0) {
-              localStorage.setItem(
-                enabledSourcesStorageKey,
-                JSON.stringify(newEnabledSources)
-              );
-            }
-          }
-
-          return fetchedSources;
-        }
-
-        return [];
-      });
-  };
-  const newsQueryResult = useQuery<News[]>({
-    queryKey: ["NEWS", queryStatus.page, enabledSources],
-    queryFn: fetchNews,
-    staleTime: 60 * 1000,
-  });
   const sources = useQuery<Source[]>({
     queryKey: ["SOURCES"],
     queryFn: fetchSources,
     staleTime: 600 * 1000,
+  });
+  const newsQueryResult = useQuery<News[]>({
+    queryKey: ["NEWS", queryStatus.page, enabledSources, searchQueryForKey],
+    queryFn: fetchNews,
+    staleTime: 60 * 1000,
   });
 
   useEffect(() => {
@@ -170,6 +182,26 @@ function useNews() {
     }
     localStorage.setItem(enabledSourcesStorageKey, JSON.stringify(newSources));
     setEnabledSources(newSources);
+    setQueryStatus({
+      ...queryStatus,
+      page: 1,
+      total: 0,
+    });
+  };
+
+  const searchQueryOnChange = (newText: string) => {
+    setSearchQuery(newText);
+  };
+
+  const handleSearchQuerySubmit = (el: KeyboardEvent<HTMLInputElement>) => {
+    if (el.key == "Enter") {
+      setSearchQueryForKey(searchQuery);
+      setQueryStatus({
+        ...queryStatus,
+        page: 1,
+        total: 0,
+      });
+    }
   };
 
   return {
@@ -180,6 +212,10 @@ function useNews() {
     sources,
     enabledSources,
     modifySource,
+    searchQuery,
+    searchQueryOnChange,
+    searchQueryForKey,
+    handleSearchQuerySubmit,
   };
 }
 

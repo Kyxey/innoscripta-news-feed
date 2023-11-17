@@ -6,6 +6,8 @@ import Error from "components/Error";
 import Loading from "components/Loading";
 import SearchNotFound from "components/SearchNotFound";
 import Pagination from "components/Pagination";
+import Icon from "components/Icon";
+import { Tooltip } from "react-tooltip";
 
 const renderCards = (news: News[]) => {
   return news.map((newsItem) => {
@@ -28,12 +30,19 @@ const processResult = (
   queryResult: UseQueryResult<News[]>,
   queryStatus: QueryStatus,
   nextPage: () => void,
-  prevPage: () => void
+  prevPage: () => void,
+  searchQuery: string
 ) => {
   if (queryResult.isSuccess) {
-    if (queryResult.data) {
+    if (queryResult.data && queryResult.data.length > 0) {
       return (
         <div className="flex flex-col space-y-4 mb-4">
+          {searchQuery !== "" && (
+            <h1>
+              {" "}
+              Search results for: <i>"{searchQuery}</i>"
+            </h1>
+          )}
           {renderCards(queryResult.data)}
           <Pagination
             currentPage={queryStatus.page}
@@ -71,14 +80,51 @@ function News() {
     sources,
     enabledSources,
     modifySource,
+    searchQuery,
+    searchQueryOnChange,
+    searchQueryForKey,
+    handleSearchQuerySubmit,
   } = useNews();
 
   return (
     <div className="w-full h-full">
       <Header />
-      <section className="grid grid-cols-1 grids-rows-3 lg:grid-cols-3 pt-28">
+      <section className="grid grid-cols-1 grids-rows-3 lg:grid-cols-3 pt-28 min-h-full">
         <div className="flex justify-center">
           <div className="text-left w-3/4 h-1/2 overflow-scroll border border-innoscripta rounded p-4">
+            <div className="relative text-gray-400">
+              <Tooltip
+                id="search-bar"
+                openEvents={{
+                  mouseenter: true,
+                  focus: true,
+                  click: true,
+                  dblclick: true,
+                  mousedown: true,
+                }}
+                closeEvents={{
+                  blur: true,
+                  click: false,
+                  dblclick: false,
+                  mouseleave: false,
+                  mouseup: false,
+                }}
+              />
+              <div className="absolute ml-2 h-full w-7 flex justify-center">
+                <Icon type="Search" />
+              </div>
+              <input
+                className="w-full bg-white text-left pl-11 p-2 text-gray-600 border border-gray-400"
+                type="text"
+                value={searchQuery}
+                onChange={(el) => searchQueryOnChange(el.target.value)}
+                onKeyUp={handleSearchQuerySubmit}
+                placeholder="Search..."
+                title="Press enter after typing to search."
+                data-tooltip-id="search-bar"
+                data-tooltip-content="Press enter after typing to search."
+              />
+            </div>
             <details className="cursor-pointer text-2xl">
               <summary>Filters</summary>
               <details className="text-lg ml-2">
@@ -109,7 +155,13 @@ function News() {
             </details>
           </div>
         </div>
-        {processResult(newsQueryResult, queryStatus, nextPage, prevPage)}
+        {processResult(
+          newsQueryResult,
+          queryStatus,
+          nextPage,
+          prevPage,
+          searchQueryForKey
+        )}
         <div></div>
       </section>
     </div>

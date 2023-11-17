@@ -8,6 +8,8 @@ import SearchNotFound from "components/SearchNotFound";
 import Pagination from "components/Pagination";
 import Icon from "components/Icon";
 import { Tooltip } from "react-tooltip";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const renderCards = (news: News[]) => {
   return news.map((newsItem) => {
@@ -84,6 +86,8 @@ function News() {
     searchQueryOnChange,
     searchQueryForKey,
     handleSearchQuerySubmit,
+    dateFilters,
+    modifyDateFilters,
   } = useNews();
 
   return (
@@ -92,7 +96,7 @@ function News() {
       <section className="grid grid-cols-1 grids-rows-3 lg:grid-cols-3 pt-28 min-h-full">
         <div className="flex justify-center">
           <div className="text-left w-3/4 h-1/2 overflow-scroll border border-innoscripta rounded p-4">
-            <div className="relative text-gray-400">
+            <div className="relative text-gray-400 mb-2">
               <Tooltip
                 id="search-bar"
                 openEvents={{
@@ -151,6 +155,43 @@ function News() {
                       </div>
                     );
                   })}
+              </details>
+              <details className="text-lg ml-2">
+                <summary>Date</summary>
+                <div className="cursor-pointer ml-4">
+                  <div className="mb-2">
+                    <label>From: </label>
+                    <DatePicker
+                      selected={dateFilters.from}
+                      placeholderText="Select a date..."
+                      onChange={(date) => modifyDateFilters("from", date)}
+                      onSelect={(date) => modifyDateFilters("from", date)}
+                      includeDateIntervals={[
+                        {
+                          start: new Date("1970/1/1"),
+                          end: dateFilters.to || new Date(),
+                        },
+                      ]}
+                      className="bg-white text-left p-1 text-gray-600 border border-gray-400"
+                    />
+                  </div>
+                  <div>
+                    <label>To: </label>
+                    <DatePicker
+                      selected={dateFilters.to}
+                      placeholderText="Select a date..."
+                      onChange={(date) => modifyDateFilters("to", date)}
+                      onSelect={(date) => modifyDateFilters("to", date)}
+                      includeDateIntervals={[
+                        {
+                          start: dateFilters.from || new Date("1970/1/1"),
+                          end: new Date(),
+                        },
+                      ]}
+                      className="bg-white text-left p-1 text-gray-600 border border-gray-400"
+                    />
+                  </div>
+                </div>
               </details>
             </details>
           </div>

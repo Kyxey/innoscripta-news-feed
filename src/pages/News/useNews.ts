@@ -26,6 +26,11 @@ type Source = {
   name: string;
 };
 
+type DateFilters = {
+  from: Date | null;
+  to: Date | null;
+};
+
 function useNews() {
   const queryStatusStorageKey = "NewsQStatus";
   const queryStatusInStorage = localStorage.getItem(queryStatusStorageKey);
@@ -44,6 +49,10 @@ function useNews() {
   );
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [searchQueryForKey, setSearchQueryForKey] = useState<string>("");
+  const [dateFilters, setDateFilters] = useState<DateFilters>({
+    from: null,
+    to: null,
+  });
   const [enabledSources, setEnabledSources] = useState<string[]>(
     enabledSourcesInStorage ? JSON.parse(enabledSourcesInStorage) : []
   );
@@ -95,9 +104,11 @@ function useNews() {
     const newsSource = newsSources["NewsAPI"];
     return axios
       .get(
-        `${newsSource.url}?sources=${enabledSources.toString()}&q=${encodeURI(
-          searchQueryForKey
-        )}&pageSize=${queryStatus.limit}&page=${queryStatus.page}&apiKey=${
+        `${newsSource.url}?sources=${enabledSources.toString()}&${
+          searchQueryForKey ? `q=${encodeURI(searchQueryForKey)}&` : ""
+        }pageSize=${queryStatus.limit}&page=${queryStatus.page}&${
+          dateFilters.from ? `from=${dateFilters.from.toISOString()}&` : ""
+        }${dateFilters.to ? `to=${dateFilters.to.toISOString()}&` : ""}apiKey=${
           newsSource.apiKey
         }`
       )
@@ -149,7 +160,13 @@ function useNews() {
     staleTime: 600 * 1000,
   });
   const newsQueryResult = useQuery<News[]>({
-    queryKey: ["NEWS", queryStatus.page, enabledSources, searchQueryForKey],
+    queryKey: [
+      "NEWS",
+      queryStatus.page,
+      enabledSources,
+      searchQueryForKey,
+      dateFilters,
+    ],
     queryFn: fetchNews,
     staleTime: 60 * 1000,
   });
@@ -206,6 +223,13 @@ function useNews() {
     }
   };
 
+  const modifyDateFilters = (type: keyof DateFilters, newDate: Date | null) => {
+    const newDates: DateFilters = { ...dateFilters };
+    newDates[type] = newDate;
+
+    setDateFilters(newDates);
+  };
+
   return {
     newsQueryResult,
     queryStatus,
@@ -218,6 +242,8 @@ function useNews() {
     searchQueryOnChange,
     searchQueryForKey,
     handleSearchQuerySubmit,
+    dateFilters,
+    modifyDateFilters,
   };
 }
 

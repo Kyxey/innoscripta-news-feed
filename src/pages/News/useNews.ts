@@ -4,6 +4,7 @@ import { newsSources } from "const/news";
 import axios from "axios";
 import defaultImg from "assets/default-img.png";
 import { useEffect, useState } from "react";
+import { urlFormatter } from "helpers/formatter";
 
 type News = {
   title: string;
@@ -104,13 +105,22 @@ function useNews() {
     const newsSource = newsSources["NewsAPI"];
     return axios
       .get(
-        `${newsSource.url}?sources=${enabledSources.toString()}&${
-          searchQueryForKey ? `q=${encodeURI(searchQueryForKey)}&` : ""
-        }pageSize=${queryStatus.limit}&page=${queryStatus.page}&${
-          dateFilters.from ? `from=${dateFilters.from.toISOString()}&` : ""
-        }${dateFilters.to ? `to=${dateFilters.to.toISOString()}&` : ""}apiKey=${
-          newsSource.apiKey
-        }`
+        urlFormatter("NewsAPI", {
+          baseURL: newsSource.url,
+          apiKey: newsSource.apiKey,
+          sources: enabledSources,
+          searchQuery: searchQueryForKey,
+          queryStatus: {
+            limit: queryStatus.limit,
+            page: queryStatus.page,
+          },
+          filters: {
+            date: {
+              from: dateFilters.from,
+              to: dateFilters.to,
+            },
+          },
+        })
       )
       .then((result) => {
         if (result.status == 200) {

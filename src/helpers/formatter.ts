@@ -16,12 +16,17 @@ function urlFormatter(
         from: Date | null;
         to: Date | null;
       };
+      category: string;
     };
   }
 ) {
   switch (type) {
     case "NewsAPI":
-      return `${config.baseURL}?sources=${config.sources.toString()}&${
+      return `${config.baseURL}?${
+        config.filters.category !== "all"
+          ? `category=${config.filters.category}`
+          : `sources=${config.sources.toString()}`
+      }&${
         config.searchQuery ? `q=${encodeURI(config.searchQuery)}&` : ""
       }pageSize=${config.queryStatus.limit}&page=${config.queryStatus.page}&${
         config.filters.date.from

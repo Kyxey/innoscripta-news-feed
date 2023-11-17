@@ -39,6 +39,11 @@ function useNews() {
   const enabledSourcesInStorage = localStorage.getItem(
     enabledSourcesStorageKey
   );
+  const enabledCategoryNewsAPIStorageKey = "NewsAPI-News-Categories";
+  const enabledCategoryNewsAPIInStorage = localStorage.getItem(
+    enabledCategoryNewsAPIStorageKey
+  );
+
   const [queryStatus, setQueryStatus] = useState<QueryStatus>(
     queryStatusInStorage
       ? JSON.parse(queryStatusInStorage)
@@ -57,6 +62,10 @@ function useNews() {
   const [enabledSources, setEnabledSources] = useState<string[]>(
     enabledSourcesInStorage ? JSON.parse(enabledSourcesInStorage) : []
   );
+  const [enabledCategoryNewsAPI, setEnabledCategoryNewsAPI] = useState<string>(
+    enabledCategoryNewsAPIInStorage ? enabledCategoryNewsAPIInStorage : "all"
+  );
+
   const fetchSources = () => {
     const newsSource = newsSources["NewsAPI"];
     return axios
@@ -119,6 +128,7 @@ function useNews() {
               from: dateFilters.from,
               to: dateFilters.to,
             },
+            category: enabledCategoryNewsAPI,
           },
         })
       )
@@ -176,6 +186,7 @@ function useNews() {
       enabledSources,
       searchQueryForKey,
       dateFilters,
+      enabledCategoryNewsAPI,
     ],
     queryFn: fetchNews,
     staleTime: 60 * 1000,
@@ -184,6 +195,22 @@ function useNews() {
   useEffect(() => {
     localStorage.setItem(queryStatusStorageKey, JSON.stringify(queryStatus));
   }, [queryStatus]);
+  useEffect(() => {
+    if (enabledSources.length > 0) {
+      localStorage.setItem(
+        enabledSourcesStorageKey,
+        JSON.stringify(enabledSources)
+      );
+    } else {
+      localStorage.removeItem(enabledSourcesStorageKey);
+    }
+  }, [enabledSources]);
+  useEffect(() => {
+    localStorage.setItem(
+      enabledCategoryNewsAPIStorageKey,
+      enabledCategoryNewsAPI
+    );
+  }, [enabledCategoryNewsAPI]);
 
   const nextPage = () => {
     if (queryStatus.limit * queryStatus.page < queryStatus.total) {
@@ -209,8 +236,23 @@ function useNews() {
     } else {
       newSources = [...enabledSources, sourceID];
     }
-    localStorage.setItem(enabledSourcesStorageKey, JSON.stringify(newSources));
     setEnabledSources(newSources);
+    setEnabledCategoryNewsAPI("all");
+    setQueryStatus({
+      ...queryStatus,
+      page: 1,
+      total: 0,
+    });
+  };
+
+  const modifyCategoryNewsAPI = (category: string) => {
+    const categoryID = category.toLowerCase();
+    setEnabledCategoryNewsAPI(categoryID);
+
+    if (categoryID !== "all") {
+      setEnabledSources([]);
+    }
+
     setQueryStatus({
       ...queryStatus,
       page: 1,
@@ -254,6 +296,8 @@ function useNews() {
     handleSearchQuerySubmit,
     dateFilters,
     modifyDateFilters,
+    enabledCategoryNewsAPI,
+    modifyCategoryNewsAPI,
   };
 }
 

@@ -9,6 +9,7 @@ import Pagination from "components/Pagination";
 import Icon from "components/Icon";
 import { Tooltip } from "react-tooltip";
 import DatePicker from "react-datepicker";
+import { newsSources } from "const/news";
 import "react-datepicker/dist/react-datepicker.css";
 
 const renderCards = (news: News[]) => {
@@ -88,6 +89,8 @@ function News() {
     handleSearchQuerySubmit,
     dateFilters,
     modifyDateFilters,
+    enabledCategoryNewsAPI,
+    modifyCategoryNewsAPI,
   } = useNews();
 
   return (
@@ -155,6 +158,37 @@ function News() {
                       </div>
                     );
                   })}
+              </details>
+              <details className="text-lg ml-2">
+                <summary>Categories</summary>
+                <details className="text-lg ml-4">
+                  <summary>{newsSources.NewsAPI.friendlyName}</summary>
+
+                  {newsSources.NewsAPI.categories.map((eachCategory) => {
+                    return (
+                      <div
+                        key={`NewsAPI-Category-${eachCategory}`}
+                        className="cursor-pointer ml-4">
+                        <input
+                          type="radio"
+                          className="mr-1 cursor-pointer"
+                          name={eachCategory}
+                          value={eachCategory}
+                          checked={
+                            enabledCategoryNewsAPI ==
+                            eachCategory.toLocaleLowerCase()
+                          }
+                          onChange={() => modifyCategoryNewsAPI(eachCategory)}
+                        />
+                        <label
+                          onClick={() => modifyCategoryNewsAPI(eachCategory)}
+                          className="cursor-pointer">
+                          {eachCategory}
+                        </label>
+                      </div>
+                    );
+                  })}
+                </details>
               </details>
               <details className="text-lg ml-2">
                 <summary>Date</summary>

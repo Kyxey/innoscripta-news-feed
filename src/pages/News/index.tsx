@@ -1,10 +1,11 @@
 import Header from "components/Header";
-import { useNews, News } from "./useNews";
+import { useNews, News, QueryStatus } from "./useNews";
 import type { UseQueryResult } from "@tanstack/react-query";
 import Card from "components/Card";
 import Error from "components/Error";
 import Loading from "components/Loading";
 import SearchNotFound from "components/SearchNotFound";
+import Pagination from "components/Pagination";
 
 const renderCards = (news: News[]) => {
   return news.map((newsItem) => {
@@ -17,16 +18,31 @@ const renderCards = (news: News[]) => {
         author={newsItem.author}
         date={new Date(newsItem.createdAt)}
         source={newsItem.source}
+        key={newsItem.title}
       />
     );
   });
 };
 
-const processResult = (queryResult: UseQueryResult<News[]>) => {
+const processResult = (
+  queryResult: UseQueryResult<News[]>,
+  queryStatus: QueryStatus,
+  nextPage: () => void,
+  prevPage: () => void
+) => {
   if (queryResult.isSuccess) {
     if (queryResult.data) {
-      console.log(queryResult.data.length, queryResult.data[0]);
-      return renderCards(queryResult.data);
+      return (
+        <div className="flex flex-col space-y-4 mb-4">
+          {renderCards(queryResult.data)}
+          <Pagination
+            currentPage={queryStatus.page}
+            totalPages={queryStatus.total / queryStatus.limit}
+            nextPageFn={nextPage}
+            prevPageFn={prevPage}
+          />
+        </div>
+      );
     }
 
     return <SearchNotFound />;
@@ -47,16 +63,14 @@ const processResult = (queryResult: UseQueryResult<News[]>) => {
 };
 
 function News() {
-  const { newsQueryResult } = useNews();
+  const { newsQueryResult, queryStatus, nextPage, prevPage } = useNews();
 
   return (
     <div className="w-full h-full">
       <Header />
       <section className="grid grid-cols-1 grids-rows-3 lg:grid-cols-3 pt-28">
         <div></div>
-        <div className="flex flex-col space-y-4">
-          {processResult(newsQueryResult)}
-        </div>
+        {processResult(newsQueryResult, queryStatus, nextPage, prevPage)}
         <div></div>
       </section>
     </div>

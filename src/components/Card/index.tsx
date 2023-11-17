@@ -28,7 +28,7 @@ function Card({
     <a
       href={url}
       target="_blank"
-      className="text-left flex flex-col lg:flex-row justify-start shadow hover:shadow-lg border border-gray-400 max-h-fit mx-3 lg:mx-0 lg:max-h-48 will-change-transform hover:scale-105 transition bg-white"
+      className="text-left flex flex-col lg:flex-row justify-start shadow hover:shadow-lg border border-gray-400 max-h-fit h-fit mx-3 lg:mx-0 lg:max-h-48 lg:h-48 will-change-transform hover:scale-105 transition bg-white"
       title={description || title}>
       <img
         src={imageLink}

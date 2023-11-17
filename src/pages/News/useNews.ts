@@ -20,9 +20,18 @@ type QueryStatus = {
   limit: number;
 };
 
+type Source = {
+  id: string;
+  name: string;
+};
+
 function useNews() {
   const queryStatusStorageKey = "NewsQStatus";
   const queryStatusInStorage = localStorage.getItem(queryStatusStorageKey);
+  const enabledSourcesStorageKey = "NewsSources";
+  const enabledSourcesInStorage = localStorage.getItem(
+    enabledSourcesStorageKey
+  );
   const [queryStatus, setQueryStatus] = useState<QueryStatus>(
     queryStatusInStorage
       ? JSON.parse(queryStatusInStorage)
@@ -32,11 +41,16 @@ function useNews() {
           total: 0,
         }
   );
+  const [enabledSources, setEnabledSources] = useState<string[]>(
+    enabledSourcesInStorage ? JSON.parse(enabledSourcesInStorage) : []
+  );
   const fetchNews = () => {
     const newsSource = newsSources["NewsAPI"];
     return axios
       .get(
-        `${newsSource.url}?category=general&country=us&pageSize=${queryStatus.limit}&page=${queryStatus.page}&apiKey=${newsSource.apiKey}`
+        `${newsSource.url}?sources=${enabledSources.toString()}&pageSize=${
+          queryStatus.limit
+        }&page=${queryStatus.page}&apiKey=${newsSource.apiKey}`
       )
       .then((result) => {
         if (result.status == 200) {
@@ -79,10 +93,51 @@ function useNews() {
         return [];
       });
   };
+
+  const fetchSources = () => {
+    const newsSource = newsSources["NewsAPI"];
+    return axios
+      .get(
+        `${newsSource.url}sources?country=us&language=en&apiKey=${newsSource.apiKey}`
+      )
+      .then((result) => {
+        if (result.status == 200) {
+          const fetchedSources: Source[] = result.data.sources.map(
+            (sourceData: { id: string; name: string }) => {
+              return {
+                id: sourceData.id,
+                name: sourceData.name,
+              };
+            }
+          );
+
+          if (!enabledSourcesInStorage) {
+            const newEnabledSources = fetchedSources.map((fetchedSource) => {
+              return fetchedSource.id;
+            });
+            if (newEnabledSources && newEnabledSources.length > 0) {
+              localStorage.setItem(
+                enabledSourcesStorageKey,
+                JSON.stringify(newEnabledSources)
+              );
+            }
+          }
+
+          return fetchedSources;
+        }
+
+        return [];
+      });
+  };
   const newsQueryResult = useQuery<News[]>({
-    queryKey: ["NEWS", queryStatus.page],
+    queryKey: ["NEWS", queryStatus.page, enabledSources],
     queryFn: fetchNews,
     staleTime: 60 * 1000,
+  });
+  const sources = useQuery<Source[]>({
+    queryKey: ["SOURCES"],
+    queryFn: fetchSources,
+    staleTime: 600 * 1000,
   });
 
   useEffect(() => {
@@ -106,7 +161,26 @@ function useNews() {
     }
   };
 
-  return { newsQueryResult, queryStatus, prevPage, nextPage };
+  const modifySource = (sourceID: string) => {
+    let newSources: string[];
+    if (enabledSources.includes(sourceID)) {
+      newSources = enabledSources.filter((val) => val !== sourceID);
+    } else {
+      newSources = [...enabledSources, sourceID];
+    }
+    localStorage.setItem(enabledSourcesStorageKey, JSON.stringify(newSources));
+    setEnabledSources(newSources);
+  };
+
+  return {
+    newsQueryResult,
+    queryStatus,
+    prevPage,
+    nextPage,
+    sources,
+    enabledSources,
+    modifySource,
+  };
 }
 
 export { useNews, type News, type QueryStatus };

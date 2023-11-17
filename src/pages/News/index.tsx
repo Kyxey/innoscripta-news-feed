@@ -37,7 +37,7 @@ const processResult = (
           {renderCards(queryResult.data)}
           <Pagination
             currentPage={queryStatus.page}
-            totalPages={queryStatus.total / queryStatus.limit}
+            totalPages={Math.ceil(queryStatus.total / queryStatus.limit)}
             nextPageFn={nextPage}
             prevPageFn={prevPage}
           />
@@ -63,13 +63,52 @@ const processResult = (
 };
 
 function News() {
-  const { newsQueryResult, queryStatus, nextPage, prevPage } = useNews();
+  const {
+    newsQueryResult,
+    queryStatus,
+    nextPage,
+    prevPage,
+    sources,
+    enabledSources,
+    modifySource,
+  } = useNews();
 
   return (
     <div className="w-full h-full">
       <Header />
       <section className="grid grid-cols-1 grids-rows-3 lg:grid-cols-3 pt-28">
-        <div></div>
+        <div className="flex justify-center">
+          <div className="text-left w-3/4 h-1/2 overflow-scroll border border-innoscripta rounded p-4">
+            <details className="cursor-pointer text-2xl">
+              <summary>Filters</summary>
+              <details className="text-lg ml-2">
+                <summary>Sources</summary>
+                {sources.isSuccess &&
+                  sources.data?.map((eachSource) => {
+                    return (
+                      <div
+                        key={eachSource.id}
+                        className="cursor-pointer ml-4">
+                        <input
+                          type="checkbox"
+                          className="mr-1 cursor-pointer"
+                          name={eachSource.id}
+                          value={eachSource.id}
+                          checked={enabledSources.indexOf(eachSource.id) !== -1}
+                          onChange={() => modifySource(eachSource.id)}
+                        />
+                        <label
+                          onClick={() => modifySource(eachSource.id)}
+                          className="cursor-pointer">
+                          {eachSource.name}
+                        </label>
+                      </div>
+                    );
+                  })}
+              </details>
+            </details>
+          </div>
+        </div>
         {processResult(newsQueryResult, queryStatus, nextPage, prevPage)}
         <div></div>
       </section>

@@ -2,7 +2,7 @@ import Icon from "components/Icon";
 
 function NotFound() {
   return (
-    <div className="text-center flex flex-col items-center justify-center text-violet-900">
+    <div className="text-center flex flex-col items-center justify-start text-violet-900">
       <div className="w-12">
         <Icon type="404NotFound" />
       </div>

@@ -2,7 +2,7 @@ import Icon from "components/Icon";
 
 function Error() {
   return (
-    <div className="text-center flex flex-col items-center justify-center text-red-600">
+    <div className="text-center flex flex-col items-center justify-start text-red-600">
       <div className="w-12">
         <Icon type="Error" />
       </div>

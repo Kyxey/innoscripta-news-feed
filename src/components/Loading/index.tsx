@@ -2,7 +2,7 @@ import Icon from "components/Icon";
 
 function Loading() {
   return (
-    <div className="text-center flex flex-col items-center justify-center text-gray-400 ">
+    <div className="text-center flex flex-col items-center justify-start text-gray-400 ">
       <div className="w-12">
         <Icon type="Loading" />
       </div>

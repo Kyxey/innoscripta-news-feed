@@ -2,7 +2,7 @@ import Icon from "components/Icon";
 
 function SearchNotFound() {
   return (
-    <div className="text-center flex flex-col items-center justify-center text-gray-500">
+    <div className="text-center flex flex-col items-center justify-start text-gray-500">
       <div className="w-12">
         <Icon type="SearchNotFound" />
       </div>

@@ -95,9 +95,11 @@ function useNews() {
     const newsSource = newsSources["NewsAPI"];
     return axios
       .get(
-        `${newsSource.url}?sources=${enabledSources.toString()}&pageSize=${
-          queryStatus.limit
-        }&page=${queryStatus.page}&apiKey=${newsSource.apiKey}`
+        `${newsSource.url}?sources=${enabledSources.toString()}&q=${encodeURI(
+          searchQueryForKey
+        )}&pageSize=${queryStatus.limit}&page=${queryStatus.page}&apiKey=${
+          newsSource.apiKey
+        }`
       )
       .then((result) => {
         if (result.status == 200) {

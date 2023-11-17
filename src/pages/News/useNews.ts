@@ -6,12 +6,17 @@ import defaultImg from "assets/default-img.png";
 import { useEffect, useState } from "react";
 import { urlFormatter } from "helpers/formatter";
 
+type Source = {
+  id: string;
+  name: string;
+};
+
 type News = {
   title: string;
   description: string;
   createdAt: Date;
   author: string;
-  source: string;
+  source: Source;
   url: string;
   image: string;
 };
@@ -20,11 +25,6 @@ type QueryStatus = {
   total: number;
   page: number;
   limit: number;
-};
-
-type Source = {
-  id: string;
-  name: string;
 };
 
 type DateFilters = {
@@ -42,6 +42,14 @@ function useNews() {
   const enabledCategoryNewsAPIStorageKey = "NewsAPI-News-Categories";
   const enabledCategoryNewsAPIInStorage = localStorage.getItem(
     enabledCategoryNewsAPIStorageKey
+  );
+  const favoriteAuthorsStorageKey = "My-Feed-Favorite-Authors";
+  const favoriteAuthorsInStorage = localStorage.getItem(
+    favoriteAuthorsStorageKey
+  );
+  const favoriteSourcesStorageKey = "My-Feed-Favorite-Sources";
+  const favoriteSourcesInStorage = localStorage.getItem(
+    favoriteSourcesStorageKey
   );
 
   const [queryStatus, setQueryStatus] = useState<QueryStatus>(
@@ -64,6 +72,12 @@ function useNews() {
   );
   const [enabledCategoryNewsAPI, setEnabledCategoryNewsAPI] = useState<string>(
     enabledCategoryNewsAPIInStorage ? enabledCategoryNewsAPIInStorage : "all"
+  );
+  const [favoriteSources, setFavoriteSources] = useState<Source[]>(
+    favoriteSourcesInStorage ? JSON.parse(favoriteSourcesInStorage) : []
+  );
+  const [favoriteAuthors, setFavoriteAuthors] = useState<string[]>(
+    favoriteAuthorsInStorage ? JSON.parse(favoriteAuthorsInStorage) : []
   );
 
   const fetchSources = () => {
@@ -151,7 +165,7 @@ function useNews() {
                 description: string;
                 publishedAt: string | number | Date;
                 author: string;
-                source: { name: string };
+                source: Source;
                 url: string;
                 urlToImage: string;
               }) => {
@@ -160,7 +174,10 @@ function useNews() {
                   description: newsAPIResult.description || "",
                   createdAt: new Date(newsAPIResult.publishedAt),
                   author: newsAPIResult.author || "",
-                  source: newsAPIResult.source.name || "",
+                  source: {
+                    id: newsAPIResult.source.id || "",
+                    name: newsAPIResult.source.name || "",
+                  },
                   url: newsAPIResult.url || "",
                   image: newsAPIResult.urlToImage || defaultImg,
                 });
@@ -211,6 +228,18 @@ function useNews() {
       enabledCategoryNewsAPI
     );
   }, [enabledCategoryNewsAPI]);
+  useEffect(() => {
+    localStorage.setItem(
+      favoriteSourcesStorageKey,
+      JSON.stringify(favoriteSources)
+    );
+  }, [favoriteSources]);
+  useEffect(() => {
+    localStorage.setItem(
+      favoriteAuthorsStorageKey,
+      JSON.stringify(favoriteAuthors)
+    );
+  }, [favoriteAuthors]);
 
   const nextPage = () => {
     if (queryStatus.limit * queryStatus.page < queryStatus.total) {
@@ -282,6 +311,37 @@ function useNews() {
     setDateFilters(newDates);
   };
 
+  const modifyFavoriteSources = (sourceInfo: Source) => {
+    let newSources: Source[];
+    if (
+      favoriteSources.find(
+        (favoriteSource) =>
+          favoriteSource.id == sourceInfo.id ||
+          favoriteSource.name == sourceInfo.name
+      )
+    ) {
+      newSources = favoriteSources.filter(
+        (favoriteSource) =>
+          favoriteSource.id !== sourceInfo.id &&
+          favoriteSource.name !== sourceInfo.name
+      );
+    } else {
+      newSources = [...favoriteSources, sourceInfo];
+    }
+    setFavoriteSources(newSources);
+  };
+  const modifyFavoriteAuthors = (author: string) => {
+    let newAuthors: string[];
+    if (favoriteAuthors.includes(author)) {
+      newAuthors = favoriteAuthors.filter(
+        (favoriteAuthor) => favoriteAuthor !== author
+      );
+    } else {
+      newAuthors = [...favoriteAuthors, author];
+    }
+    setFavoriteAuthors(newAuthors);
+  };
+
   return {
     newsQueryResult,
     queryStatus,
@@ -298,7 +358,11 @@ function useNews() {
     modifyDateFilters,
     enabledCategoryNewsAPI,
     modifyCategoryNewsAPI,
+    favoriteAuthors,
+    modifyFavoriteAuthors,
+    favoriteSources,
+    modifyFavoriteSources,
   };
 }
 
-export { useNews, type News, type QueryStatus };
+export { useNews, type News, type QueryStatus, type Source };

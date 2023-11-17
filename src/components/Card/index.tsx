@@ -1,4 +1,10 @@
 import Icon from "components/Icon";
+import { Tooltip } from "react-tooltip";
+
+type Source = {
+  id: string;
+  name: string;
+};
 
 type Props = {
   imageLink: string;
@@ -6,8 +12,12 @@ type Props = {
   description: string;
   author: string;
   date: Date;
-  source: string;
+  source: Source;
   url: string;
+  isFavoriteSource: boolean;
+  isFavoriteAuthor: boolean;
+  favoriteAuthorModifyFn: (favoriteAuthor: string) => void;
+  favoriteSourceModifyFn: (favoriteSource: Source) => void;
 };
 
 const classNames = {
@@ -23,44 +33,116 @@ function Card({
   date,
   source,
   url,
+  isFavoriteAuthor,
+  isFavoriteSource,
+  favoriteAuthorModifyFn,
+  favoriteSourceModifyFn,
 }: Props) {
   return (
-    <a
-      href={url}
-      target="_blank"
-      className="text-left flex flex-col lg:flex-row justify-start shadow hover:shadow-lg border border-gray-400 max-h-fit h-fit mx-3 lg:mx-0 lg:max-h-48 lg:h-48 will-change-transform hover:scale-105 transition bg-white"
-      title={description || title}>
-      <img
-        src={imageLink}
-        alt={`Innoscripta News - ${title} image`}
-        className="w-100 lg:w-52"
-      />
-      <div className="flex flex-col items-start p-3 justify-between">
-        <p className="text-xl text-innoscripta">{title}</p>
-        <div className="flex flex-col justify-end">
-          <p className={classNames.titleWithIcon}>
-            <span className={classNames.icons}>
-              <Icon type="Person" />
-            </span>{" "}
-            {author}
-          </p>
-          <p className={classNames.titleWithIcon}>
-            <span className={classNames.icons}>
-              <Icon type="Date" />
-            </span>{" "}
-            {date.toLocaleString()}
-          </p>
-          <div className="flex flex-row">
+    <div className="flex flex-col h-max">
+      <a
+        href={url}
+        target="_blank"
+        className="text-left flex flex-col lg:flex-row justify-start shadow hover:shadow-lg border border-gray-400 max-h-fit h-fit mx-3 lg:mx-0 lg:max-h-48 lg:h-48 will-change-transform hover:scale-105 transition bg-white"
+        title={description || title}>
+        <img
+          src={imageLink}
+          alt={`Innoscripta News - ${title} image`}
+          className="w-100 lg:w-52"
+        />
+        <div className="flex flex-col items-start p-3 justify-between">
+          <p className="text-xl text-innoscripta">{title}</p>
+          <div className="flex flex-col justify-end">
             <p className={classNames.titleWithIcon}>
               <span className={classNames.icons}>
-                <Icon type="Globe" />
+                <Icon type="Person" />
               </span>{" "}
-              {source}
+              {author}
             </p>
+            <p className={classNames.titleWithIcon}>
+              <span className={classNames.icons}>
+                <Icon type="Date" />
+              </span>{" "}
+              {date.toLocaleString()}
+            </p>
+            <div className="flex flex-row">
+              <p className={classNames.titleWithIcon}>
+                <span className={classNames.icons}>
+                  <Icon type="Globe" />
+                </span>{" "}
+                {source.name}
+              </p>
+            </div>
+          </div>
+        </div>
+      </a>
+      <div className="flex justify-start space-x-2 h-max p-2">
+        <div
+          className="cursor-pointer h-6"
+          onClick={() => favoriteSourceModifyFn(source)}>
+          <Tooltip
+            id="favorite-source"
+            openEvents={{
+              mouseenter: true,
+              focus: true,
+              click: true,
+              dblclick: true,
+              mousedown: true,
+            }}
+            closeEvents={{
+              blur: true,
+              click: false,
+              dblclick: false,
+              mouseleave: true,
+              mouseup: false,
+            }}
+          />
+          <div
+            className={
+              "w-5 h-full " +
+              (isFavoriteSource ? "text-red-700" : "text-gray-400")
+            }
+            data-tooltip-id="favorite-source"
+            data-tooltip-content={`${
+              isFavoriteSource ? "Remove" : "Mark as"
+            } favorite source.`}>
+            <Icon type="Globe" />
+          </div>
+        </div>
+        <div
+          className="cursor-pointer h-6"
+          onClick={() => favoriteAuthorModifyFn(author)}>
+          <Tooltip
+            id="favorite-author"
+            openEvents={{
+              mouseenter: true,
+              focus: true,
+              click: true,
+              dblclick: true,
+              mousedown: true,
+            }}
+            closeEvents={{
+              blur: true,
+              click: false,
+              dblclick: false,
+              mouseleave: true,
+              mouseup: false,
+            }}
+          />
+          <div
+            className={
+              "w-5 h-full " +
+              (isFavoriteAuthor ? "text-red-700" : "text-gray-400")
+            }
+            data-tooltip-id="favorite-author"
+            data-tooltip-content={`${
+              isFavoriteAuthor ? "Remove" : "Mark as"
+            } favorite author.`}>
+            <Icon type="Person" />
           </div>
         </div>
       </div>
-    </a>
+    </div>
   );
 }
 

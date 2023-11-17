@@ -1,5 +1,5 @@
 import Header from "components/Header";
-import { useNews, News, QueryStatus } from "./useNews";
+import { useNews, type News, type QueryStatus, type Source } from "./useNews";
 import type { UseQueryResult } from "@tanstack/react-query";
 import Card from "components/Card";
 import Error from "components/Error";
@@ -12,7 +12,14 @@ import DatePicker from "react-datepicker";
 import { newsSources } from "const/news";
 import "react-datepicker/dist/react-datepicker.css";
 
-const renderCards = (news: News[]) => {
+type FavoriteAttrs = {
+  favoriteAuthors: string[];
+  favoriteSources: Source[];
+  favoriteAuthorModifyFn: (favoriteAuthor: string) => void;
+  favoriteSourceModifyFn: (favoriteSource: Source) => void;
+};
+
+const renderCards = (news: News[], favoriteAttrs: FavoriteAttrs) => {
   return news.map((newsItem) => {
     return (
       <Card
@@ -24,6 +31,18 @@ const renderCards = (news: News[]) => {
         date={new Date(newsItem.createdAt)}
         source={newsItem.source}
         key={newsItem.title}
+        isFavoriteAuthor={favoriteAttrs.favoriteAuthors.includes(
+          newsItem.author
+        )}
+        isFavoriteSource={
+          favoriteAttrs.favoriteSources.find(
+            (favoriteSource) =>
+              favoriteSource.id == newsItem.source.id ||
+              favoriteSource.name == newsItem.source.id
+          ) !== undefined
+        }
+        favoriteAuthorModifyFn={favoriteAttrs.favoriteAuthorModifyFn}
+        favoriteSourceModifyFn={favoriteAttrs.favoriteSourceModifyFn}
       />
     );
   });
@@ -34,7 +53,8 @@ const processResult = (
   queryStatus: QueryStatus,
   nextPage: () => void,
   prevPage: () => void,
-  searchQuery: string
+  searchQuery: string,
+  favoriteAttrs: FavoriteAttrs
 ) => {
   if (queryResult.isSuccess) {
     if (queryResult.data && queryResult.data.length > 0) {
@@ -46,7 +66,7 @@ const processResult = (
               Search results for: <i>"{searchQuery}</i>"
             </h1>
           )}
-          {renderCards(queryResult.data)}
+          {renderCards(queryResult.data, favoriteAttrs)}
           <Pagination
             currentPage={queryStatus.page}
             totalPages={Math.ceil(queryStatus.total / queryStatus.limit)}
@@ -91,6 +111,10 @@ function News() {
     modifyDateFilters,
     enabledCategoryNewsAPI,
     modifyCategoryNewsAPI,
+    favoriteAuthors,
+    modifyFavoriteAuthors,
+    favoriteSources,
+    modifyFavoriteSources,
   } = useNews();
 
   return (
@@ -235,7 +259,13 @@ function News() {
           queryStatus,
           nextPage,
           prevPage,
-          searchQueryForKey
+          searchQueryForKey,
+          {
+            favoriteAuthors: favoriteAuthors,
+            favoriteSources: favoriteSources,
+            favoriteAuthorModifyFn: modifyFavoriteAuthors,
+            favoriteSourceModifyFn: modifyFavoriteSources,
+          }
         )}
         <div></div>
       </section>

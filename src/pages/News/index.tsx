@@ -60,7 +60,7 @@ const processResult = (
   if (queryResult.isSuccess) {
     if (queryResult.data && queryResult.data.length > 0) {
       return (
-        <div className="flex flex-col space-y-4 mb-4">
+        <div className="flex flex-col space-y-4 mb-4 px-3 lg:px-0">
           {searchQuery !== "" && (
             <p className="text-2xl text-black">
               {" "}
@@ -140,9 +140,9 @@ function News() {
       </p>
       <section className="grid grid-cols-1 grids-rows-3 lg:grid-cols-3 min-h-max pt-4">
         {/* Search bar and general filters */}
-        <div className="flex justify-center h-fit min-h-max">
+        <div className="flex justify-center h-fit min-h-max mb-4">
           <div className="text-left w-3/4 h-1/2 overflow-scroll border border-innoscripta rounded p-4">
-            <details className="cursor-pointer text-2xl">
+            <details className="cursor-pointer text-2xl mb-4">
               <summary>General Filters</summary>
               <details className="text-lg ml-2">
                 <summary>Date</summary>
@@ -185,7 +185,7 @@ function News() {
           </div>
         </div>
         {/* Search bar */}
-        <div className="relative text-gray-400 w-full h-fit">
+        <div className="relative text-gray-400 w-3/4 lg:w-full mx-auto h-fit">
           <Tooltip
             id="search-bar"
             openEvents={{
@@ -226,7 +226,7 @@ function News() {
         <b>{newsSources.NewsAPI.friendlyName}</b>
       </p>
       <section className="grid grid-cols-1 grids-rows-3 lg:grid-cols-3 min-h-max">
-        <div className="flex justify-center h-fit min-h-max">
+        <div className="flex justify-center h-fit min-h-max mb-4">
           <div className="text-left w-3/4 h-1/2 overflow-scroll border border-innoscripta rounded p-4">
             <details className="cursor-pointer text-2xl">
               <summary>Filters</summary>
@@ -267,10 +267,7 @@ function News() {
                         className="mr-1 cursor-pointer"
                         name={eachCategory}
                         value={eachCategory}
-                        checked={
-                          enabledCategoryNewsAPI ==
-                          eachCategory.toLocaleLowerCase()
-                        }
+                        checked={enabledCategoryNewsAPI == eachCategory}
                         onChange={() => modifyCategoryNewsAPI(eachCategory)}
                       />
                       <label
@@ -310,7 +307,7 @@ function News() {
         <b>{newsSources.TheGuardianAPI.friendlyName}</b>
       </p>
       <section className="grid grid-cols-1 grids-rows-3 lg:grid-cols-3 min-h-max">
-        <div className="flex justify-center h-fit min-h-max">
+        <div className="flex justify-center h-fit min-h-max mb-4">
           <div className="text-left w-3/4 h-1/2 overflow-scroll border border-innoscripta rounded p-4">
             <details className="cursor-pointer text-2xl">
               <summary>Filters</summary>
@@ -355,10 +352,7 @@ function News() {
                         className="mr-1 cursor-pointer"
                         name={eachCategory}
                         value={eachCategory}
-                        checked={
-                          enabledCategoryTheGuardian ==
-                          eachCategory.toLocaleLowerCase()
-                        }
+                        checked={enabledCategoryTheGuardian == eachCategory}
                         onChange={() => modifyCategoryTheGuardian(eachCategory)}
                       />
                       <label
@@ -404,7 +398,7 @@ function News() {
         <b>{newsSources.NewYorkTimesAPI.friendlyName}</b>
       </p>
       <section className="grid grid-cols-1 grids-rows-3 lg:grid-cols-3 min-h-max">
-        <div className="flex justify-center h-fit min-h-max">
+        <div className="flex justify-center h-fit min-h-max mb-4">
           <div className="text-left w-3/4 h-1/2 overflow-scroll border border-innoscripta rounded p-4">
             <details className="cursor-pointer text-2xl">
               <summary>Filters</summary>

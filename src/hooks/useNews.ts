@@ -195,7 +195,13 @@ function useNews() {
       });
   };
   const fetchGuardianNews = () => {
+    if (enabledSourcesTheGuardian.length == 0) {
+      resetQueryStatusTheGuardian();
+      return [];
+    }
+
     const newsSource = newsSources["TheGuardianAPI"];
+
     return axios
       .get(
         urlFormatter("TheGuardianAPI", {
@@ -262,6 +268,11 @@ function useNews() {
       });
   };
   const fetchNewYorkTimesNews = () => {
+    if (enabledSourcesNewYorkTimes.length == 0) {
+      resetQueryStatusNewYorkTimes();
+      return [];
+    }
+
     const newsSource = newsSources["NewYorkTimesAPI"];
     return axios
       .get(

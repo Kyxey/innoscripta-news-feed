@@ -94,7 +94,7 @@ function useSettings(
   }, [queryStatus, storageKeys.queryStatusStorageKey]);
 
   const modifyCategory = (category: string) => {
-    const categoryID = category.toLowerCase();
+    const categoryID = category;
     setEnabledCategory(categoryID);
 
     resetQueryStatus();

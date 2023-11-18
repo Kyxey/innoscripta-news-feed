@@ -54,7 +54,7 @@ const processResult = (
   if (queryResult.isSuccess) {
     if (queryResult.data && queryResult.data.length > 0) {
       return (
-        <div className="flex flex-col space-y-4 mb-4">
+        <div className="flex flex-col items-center space-y-4 mb-4 px-3 lg:px-0">
           {searchQuery !== "" && (
             <p className="text-2xl text-black">
               {" "}
@@ -67,7 +67,7 @@ const processResult = (
     }
 
     return (
-      <div>
+      <div className="w-3/4 lg:w-full">
         <SearchNotFound />
         <p className="text-lg mt-3 text-center text-gray-500">
           Start liking some news from the{" "}
@@ -128,7 +128,7 @@ function MyFeed() {
       <section className="grid grid-cols-1 grids-rows-3 lg:grid-cols-3 min-h-max pt-4">
         <div></div>
         {/* Search bar */}
-        <div className="relative text-gray-400 w-full h-fit">
+        <div className="relative text-gray-400 w-3/4 lg:w-full mx-auto h-fit">
           <Tooltip
             id="search-bar"
             openEvents={{
@@ -163,8 +163,8 @@ function MyFeed() {
         </div>
         <div></div>
       </section>
-      <section className="grid grid-cols-1 grids-rows-3 lg:grid-cols-3 min-h-max">
-        <div className="flex justify-center h-fit min-h-max">
+      <section className="grid grid-cols-1 grids-rows-3 lg:grid-cols-3 min-h-max justify-items-center">
+        <div className="flex justify-center h-fit min-h-max mb-4">
           <div></div>
         </div>
         {processResult(shakeDataFromQuery(combinedQuery), searchQueryForKey, {

@@ -28,7 +28,7 @@ function urlFormatter(
     case "NewsAPI":
       return `${config.baseURL}?${
         isCategoryNeeded
-          ? `category=${config.filters.category}`
+          ? `category=${config.filters.category.toLowerCase()}`
           : `sources=${config.sources.toString()}`
       }&${
         config.searchQuery ? `q=${encodeURI(config.searchQuery)}&` : ""
@@ -47,7 +47,11 @@ function urlFormatter(
         config.sources.length > 0
           ? `production-office=${config.sources.join("|").toString()}&`
           : ""
-      }${isCategoryNeeded ? `section=${config.filters.category}&` : ""}${
+      }${
+        isCategoryNeeded
+          ? `section=${config.filters.category.toLowerCase()}&`
+          : ""
+      }${
         config.searchQuery ? `q=${encodeURI(config.searchQuery)}&` : ""
       }page-size=${config.queryStatus.limit}&page=${
         config.queryStatus.page

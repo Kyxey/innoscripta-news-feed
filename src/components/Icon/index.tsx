@@ -7,7 +7,7 @@ const icons = {
       x="0px"
       y="0px"
       viewBox="0 0 64 64"
-      className="fill-current">
+      className="fill-current max-w-[48px]">
       <path
         d="M48.6,43.5c3.5-4.6,5.6-10.2,5.6-16.4C54.2,12.2,42.1,0,27.1,0C12.2,0,0,12.2,0,27.1
 	c0,14.9,12.2,27.1,27.1,27.1c6.2,0,11.9-2.1,16.4-5.6L58.9,64l5.1-5.1L48.6,43.5z M27.1,47c-11,0-19.9-8.9-19.9-19.9
@@ -23,7 +23,7 @@ const icons = {
       x="0px"
       y="0px"
       viewBox="0 0 64 64"
-      className="fill-current">
+      className="fill-current max-w-[48px]">
       <rect
         x="-368"
         y="-368"
@@ -44,7 +44,7 @@ const icons = {
       x="0px"
       y="0px"
       viewBox="0 0 64 64"
-      className="fill-current">
+      className="fill-current max-w-[48px]">
       <path
         d="M4.5,62.6h55.1c1.7,0,3.1-1.4,3.1-3.1V13.6c0-1.7-1.4-3.1-3.1-3.1H47.3V4.5c0-1.7-1.4-3.1-3.1-3.1c-1.7,0-3.1,1.4-3.1,3.1
 	v6.1H22.8V4.5c0-1.7-1.4-3.1-3.1-3.1c-1.7,0-3.1,1.4-3.1,3.1v6.1H4.5c-1.7,0-3.1,1.4-3.1,3.1v45.9C1.4,61.2,2.8,62.6,4.5,62.6z
@@ -60,7 +60,7 @@ const icons = {
       x="0px"
       y="0px"
       viewBox="0 0 64 64"
-      className="fill-current">
+      className="fill-current max-w-[48px]">
       <g id="Page-1">
         <g
           id="Dribbble-Light-Preview"
@@ -91,7 +91,7 @@ const icons = {
       x="0px"
       y="0px"
       viewBox="0 0 64 64"
-      className="fill-current">
+      className="fill-current max-w-[48px]">
       <path
         d="M32,30.6c8,0,14.5-6.5,14.5-14.5S40,1.5,32,1.5S17.5,8,17.5,16.1S24,30.6,32,30.6z M32,37C12.7,37,0.3,47.6,0.3,52.8v9.7
    h63.4v-9.7C63.7,46.5,52,37,32,37L32,37z"
@@ -106,7 +106,7 @@ const icons = {
       x="0px"
       y="0px"
       viewBox="0 0 120 120"
-      className="fill-current">
+      className="fill-current max-w-[48px]">
       <g>
         <path
           d="M18,78h12v16c0,1.1,0.9,2,2,2c1.1,0,2-0.9,2-2V78h6c1.1,0,2-0.9,2-2s-0.9-2-2-2h-6v-4c0-1.1-0.9-2-2-2c-1.1,0-2,0.9-2,2v4
@@ -137,7 +137,7 @@ const icons = {
       x="0px"
       y="0px"
       viewBox="0 0 120 120"
-      className="fill-current">
+      className="fill-current max-w-[48px]">
       <path
         d="M69.8,29.5L53.7,45.7L37.6,29.5l-8.1,8.1l16.1,16.1L29.5,69.9l8.1,8.1l16.1-16.1l16.1,16.1l8.1-8.1L61.8,53.7l16.1-16.1
 	L69.8,29.5z M92.2,83c6.2-8.1,9.9-18.3,9.9-29.3c0-26.7-21.7-48.4-48.4-48.4S5.3,27,5.3,53.7s21.7,48.4,48.4,48.4
@@ -154,7 +154,7 @@ const icons = {
       x="0px"
       y="0px"
       viewBox="0 0 120 120"
-      className="fill-current animate-spin">
+      className="fill-current animate-spin max-w-[48px]">
       <path
         d="M21.4,51.8h-7.3C17.5,32.6,32.6,17.5,51.8,14v7.4C36.5,24.6,24.6,36.5,21.4,51.8z M60,2.5v18c21.9,0,39.5,17.7,39.5,39.5
 	S81.9,99.5,60,99.5S20.5,81.9,20.5,60h-18c0,31.7,25.8,57.5,57.5,57.5s57.5-25.8,57.5-57.5S91.7,2.5,60,2.5z"
@@ -168,7 +168,8 @@ const icons = {
       xmlns="http://www.w3.org/2000/svg"
       x="0px"
       y="0px"
-      viewBox="0 0 120 120">
+      viewBox="0 0 120 120"
+      className="max-w-[48px]">
       <g>
         <g>
           <g>

@@ -3,7 +3,7 @@ import NotFound from "components/NotFound";
 
 function NotFoundPage() {
   return (
-    <div>
+    <div className="w-full h-full space-y-9 pt-28">
       <Header />
       <NotFound />
     </div>

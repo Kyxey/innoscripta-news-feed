@@ -133,9 +133,12 @@ function News() {
   const { nextPage, prevPage } = usePagination();
 
   return (
-    <div className="w-full h-full space-y-9">
+    <div className="w-full h-full space-y-9 pt-28">
       <Header />
-      <section className="grid grid-cols-1 grids-rows-3 lg:grid-cols-3 min-h-max pt-28">
+      <p className="text-left border border-t-0 border-x-0 w-1/2 text-innoscripta text-4xl ml-12 border-b-gray-300">
+        <b>Top Headlines</b>
+      </p>
+      <section className="grid grid-cols-1 grids-rows-3 lg:grid-cols-3 min-h-max pt-4">
         {/* Search bar and general filters */}
         <div className="flex justify-center h-fit min-h-max">
           <div className="text-left w-3/4 h-1/2 overflow-scroll border border-innoscripta rounded p-4">
@@ -219,7 +222,7 @@ function News() {
       </section>
 
       {/* News API */}
-      <p className="text-left border border-t-0 border-x-0 w-1/2 text-innoscripta text-4xl ml-12 border-b-gray-300">
+      <p className="text-left border border-t-0 border-x-0 w-1/2 text-innoscripta text-2xl ml-12 border-b-gray-300">
         <b>{newsSources.NewsAPI.friendlyName}</b>
       </p>
       <section className="grid grid-cols-1 grids-rows-3 lg:grid-cols-3 min-h-max">
@@ -303,7 +306,7 @@ function News() {
       </section>
 
       {/* The Guardian */}
-      <p className="text-left border border-t-0 border-x-0 w-1/2 text-innoscripta text-4xl ml-12 border-b-gray-300">
+      <p className="text-left border border-t-0 border-x-0 w-1/2 text-innoscripta text-2xl ml-12 border-b-gray-300">
         <b>{newsSources.TheGuardianAPI.friendlyName}</b>
       </p>
       <section className="grid grid-cols-1 grids-rows-3 lg:grid-cols-3 min-h-max">
@@ -397,7 +400,7 @@ function News() {
       </section>
 
       {/* New York Times */}
-      <p className="text-left border border-t-0 border-x-0 w-1/2 text-innoscripta text-4xl ml-12 border-b-gray-300">
+      <p className="text-left border border-t-0 border-x-0 w-1/2 text-innoscripta text-2xl ml-12 border-b-gray-300">
         <b>{newsSources.NewYorkTimesAPI.friendlyName}</b>
       </p>
       <section className="grid grid-cols-1 grids-rows-3 lg:grid-cols-3 min-h-max">

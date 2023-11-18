@@ -1,6 +1,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import News from "pages/News";
+import Settings from "pages/Settings";
 import NotFound from "pages/NotFound";
 import "App.css";
 
@@ -15,6 +16,10 @@ function App() {
             <Route
               path="/"
               Component={News}
+            />
+            <Route
+              path="/settings"
+              Component={Settings}
             />
             <Route
               path="*"

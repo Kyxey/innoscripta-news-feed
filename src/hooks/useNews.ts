@@ -6,31 +6,7 @@ import defaultImg from "assets/default-img.png";
 import { useEffect, useState, useMemo } from "react";
 import { urlFormatter } from "helpers/formatter";
 import { storageKeys } from "const/storage";
-
-type Source = {
-  id: string;
-  name: string;
-};
-
-type News = {
-  title: string;
-  createdAt: Date;
-  author: string;
-  source: Source;
-  url: string;
-  image: string;
-};
-
-type QueryStatus = {
-  total: number;
-  page: number;
-  limit: number;
-};
-
-type DateFilters = {
-  from: Date | null;
-  to: Date | null;
-};
+import type { DateFilters, News, QueryStatus, Source } from "types";
 
 function useNews() {
   const queryStatusInStorage = localStorage.getItem(
@@ -563,23 +539,6 @@ function useNews() {
     );
   }, [favoriteAuthors]);
 
-  const nextPage = () => {
-    if (queryStatus.limit * queryStatus.page < queryStatus.total) {
-      setQueryStatus({
-        ...queryStatus,
-        page: queryStatus.page + 1,
-      });
-    }
-  };
-  const prevPage = () => {
-    if (queryStatus.page > 1) {
-      setQueryStatus({
-        ...queryStatus,
-        page: queryStatus.page - 1,
-      });
-    }
-  };
-
   const modifySource = (sourceID: string) => {
     let newSources: string[];
     if (enabledSources.includes(sourceID)) {
@@ -609,45 +568,6 @@ function useNews() {
       page: 1,
       total: 0,
     });
-  };
-
-  const nextPageTheGuardian = () => {
-    if (
-      theGuardianQueryStatus.limit * theGuardianQueryStatus.page <
-      theGuardianQueryStatus.total
-    ) {
-      setTheGuardianQueryStatus({
-        ...theGuardianQueryStatus,
-        page: theGuardianQueryStatus.page + 1,
-      });
-    }
-  };
-  const prevPageTheGuardian = () => {
-    if (theGuardianQueryStatus.page > 1) {
-      setTheGuardianQueryStatus({
-        ...theGuardianQueryStatus,
-        page: theGuardianQueryStatus.page - 1,
-      });
-    }
-  };
-  const nextPageNewYorkTimes = () => {
-    if (
-      newYorkTimesQueryStatus.limit * newYorkTimesQueryStatus.page <
-      newYorkTimesQueryStatus.total
-    ) {
-      setNewYorkTimesQueryStatus({
-        ...newYorkTimesQueryStatus,
-        page: newYorkTimesQueryStatus.page + 1,
-      });
-    }
-  };
-  const prevPageNewYorkTimes = () => {
-    if (newYorkTimesQueryStatus.page > 1) {
-      setNewYorkTimesQueryStatus({
-        ...newYorkTimesQueryStatus,
-        page: newYorkTimesQueryStatus.page - 1,
-      });
-    }
   };
   const modifySourceTheGuardian = (sourceID: string) => {
     let newSources: string[];
@@ -759,8 +679,6 @@ function useNews() {
   return {
     newsQueryResult,
     queryStatus,
-    prevPage,
-    nextPage,
     sources,
     enabledSources,
     modifySource,
@@ -778,8 +696,6 @@ function useNews() {
     modifyFavoriteSources,
     theGuardianNewsQueryResult,
     theGuardianQueryStatus,
-    prevPageTheGuardian,
-    nextPageTheGuardian,
     enabledCategoryTheGuardian,
     modifyCategoryTheGuardian,
     modifySourceTheGuardian,
@@ -787,14 +703,15 @@ function useNews() {
     theGuardianSources,
     newYorkTimesNewsQueryResult,
     newYorkTimesQueryStatus,
-    prevPageNewYorkTimes,
-    nextPageNewYorkTimes,
     enabledCategoryNewYorkTimes,
     modifyCategoryNewYorkTimes,
     modifySourceNewYorkTimes,
     enabledSourcesNewYorkTimes,
     newYorkTimesSources,
+    setQueryStatus,
+    setTheGuardianQueryStatus,
+    setNewYorkTimesQueryStatus,
   };
 }
 
-export { useNews, type News, type QueryStatus, type Source };
+export { useNews };

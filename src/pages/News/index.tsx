@@ -1,11 +1,8 @@
 import Header from "components/Header";
-import {
-  useNews,
-  type News,
-  type QueryStatus,
-  type Source,
-} from "../../hooks/useNews";
+import { useNews } from "hooks/useNews";
+import { usePagination } from "hooks/usePagination";
 import type { UseQueryResult } from "@tanstack/react-query";
+import type { News, QueryStatus, Source } from "types";
 import Card from "components/Card";
 import Error from "components/Error";
 import Loading from "components/Loading";
@@ -102,8 +99,6 @@ function News() {
   const {
     newsQueryResult,
     queryStatus,
-    nextPage,
-    prevPage,
     sources,
     enabledSources,
     modifySource,
@@ -123,21 +118,21 @@ function News() {
     modifySourceTheGuardian,
     enabledSourcesTheGuardian,
     modifyCategoryTheGuardian,
-    nextPageTheGuardian,
-    prevPageTheGuardian,
     theGuardianNewsQueryResult,
     theGuardianQueryStatus,
     theGuardianSources,
     newYorkTimesNewsQueryResult,
     newYorkTimesQueryStatus,
-    prevPageNewYorkTimes,
-    nextPageNewYorkTimes,
     enabledCategoryNewYorkTimes,
     modifyCategoryNewYorkTimes,
     modifySourceNewYorkTimes,
     enabledSourcesNewYorkTimes,
     newYorkTimesSources,
+    setNewYorkTimesQueryStatus,
+    setQueryStatus,
+    setTheGuardianQueryStatus,
   } = useNews();
+  const { nextPage, prevPage } = usePagination();
 
   return (
     <div className="w-full h-full space-y-9">
@@ -292,8 +287,12 @@ function News() {
         {processResult(
           newsQueryResult,
           queryStatus,
-          nextPage,
-          prevPage,
+          () => {
+            nextPage({ queryStatus, setQueryStatus });
+          },
+          () => {
+            prevPage({ queryStatus, setQueryStatus });
+          },
           searchQueryForKey,
           {
             favoriteAuthors: favoriteAuthors,
@@ -376,8 +375,18 @@ function News() {
         {processResult(
           theGuardianNewsQueryResult,
           theGuardianQueryStatus,
-          nextPageTheGuardian,
-          prevPageTheGuardian,
+          () => {
+            nextPage({
+              queryStatus: theGuardianQueryStatus,
+              setQueryStatus: setTheGuardianQueryStatus,
+            });
+          },
+          () => {
+            prevPage({
+              queryStatus: theGuardianQueryStatus,
+              setQueryStatus: setTheGuardianQueryStatus,
+            });
+          },
           searchQueryForKey,
           {
             favoriteAuthors: favoriteAuthors,
@@ -461,8 +470,18 @@ function News() {
         {processResult(
           newYorkTimesNewsQueryResult,
           newYorkTimesQueryStatus,
-          nextPageNewYorkTimes,
-          prevPageNewYorkTimes,
+          () => {
+            nextPage({
+              queryStatus: newYorkTimesQueryStatus,
+              setQueryStatus: setNewYorkTimesQueryStatus,
+            });
+          },
+          () => {
+            prevPage({
+              queryStatus: newYorkTimesQueryStatus,
+              setQueryStatus: setNewYorkTimesQueryStatus,
+            });
+          },
           searchQueryForKey,
           {
             favoriteAuthors: favoriteAuthors,

@@ -51,12 +51,14 @@ function Card({
         <div className="flex flex-col items-start p-3 justify-between max-w-full overflow-hidden">
           <p className="text-xl text-innoscripta">{title}</p>
           <div className="flex flex-col items-start max-w-full truncate">
-            <p className={classNames.titleWithIcon}>
-              <span className={classNames.icons}>
-                <Icon type="Person" />
-              </span>{" "}
-              {author}
-            </p>
+            {author && (
+              <p className={classNames.titleWithIcon}>
+                <span className={classNames.icons}>
+                  <Icon type="Person" />
+                </span>{" "}
+                {author}
+              </p>
+            )}
             <p className={classNames.titleWithIcon}>
               <span className={classNames.icons}>
                 <Icon type="Date" />
@@ -107,38 +109,40 @@ function Card({
             <Icon type="Globe" />
           </div>
         </div>
-        <div
-          className="cursor-pointer h-6"
-          onClick={() => favoriteAuthorModifyFn(author)}>
-          <Tooltip
-            id="favorite-author"
-            openEvents={{
-              mouseenter: true,
-              focus: true,
-              click: true,
-              dblclick: true,
-              mousedown: true,
-            }}
-            closeEvents={{
-              blur: true,
-              click: false,
-              dblclick: false,
-              mouseleave: true,
-              mouseup: false,
-            }}
-          />
+        {author && (
           <div
-            className={
-              "w-5 h-full " +
-              (isFavoriteAuthor ? "text-red-700" : "text-gray-400")
-            }
-            data-tooltip-id="favorite-author"
-            data-tooltip-content={`${
-              isFavoriteAuthor ? "Remove" : "Mark as"
-            } favorite author.`}>
-            <Icon type="Person" />
+            className="cursor-pointer h-6"
+            onClick={() => favoriteAuthorModifyFn(author)}>
+            <Tooltip
+              id="favorite-author"
+              openEvents={{
+                mouseenter: true,
+                focus: true,
+                click: true,
+                dblclick: true,
+                mousedown: true,
+              }}
+              closeEvents={{
+                blur: true,
+                click: false,
+                dblclick: false,
+                mouseleave: true,
+                mouseup: false,
+              }}
+            />
+            <div
+              className={
+                "w-5 h-full " +
+                (isFavoriteAuthor ? "text-red-700" : "text-gray-400")
+              }
+              data-tooltip-id="favorite-author"
+              data-tooltip-content={`${
+                isFavoriteAuthor ? "Remove" : "Mark as"
+              } favorite author.`}>
+              <Icon type="Person" />
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

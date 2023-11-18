@@ -22,8 +22,8 @@ function renderFavoriteDetails(
                 ? eachFavoriteItems
                 : eachFavoriteItems.id
             }`}
-            className="mt-4 text-lg cursor-default inline-block w-max max-w-full relative truncate">
-            <div className="rounded-2xl bg-innoscripta text-white w-max max-w-full p-2 truncate">
+            className="mt-4 text-lg cursor-default inline-block w-max max-w-full relative truncate mr-3">
+            <div className="rounded-2xl bg-innoscripta text-white w-max max-w-full p-2 pr-10 truncate">
               {typeof eachFavoriteItems === "string"
                 ? eachFavoriteItems
                 : eachFavoriteItems.name}

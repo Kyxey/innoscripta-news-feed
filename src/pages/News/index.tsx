@@ -120,14 +120,12 @@ function News() {
     modifyCategoryTheGuardian,
     theGuardianNewsQueryResult,
     theGuardianQueryStatus,
-    theGuardianSources,
     newYorkTimesNewsQueryResult,
     newYorkTimesQueryStatus,
     enabledCategoryNewYorkTimes,
     modifyCategoryNewYorkTimes,
     modifySourceNewYorkTimes,
     enabledSourcesNewYorkTimes,
-    newYorkTimesSources,
     setNewYorkTimesQueryStatus,
     setQueryStatus,
     setTheGuardianQueryStatus,
@@ -315,8 +313,8 @@ function News() {
               <summary>Filters</summary>
               <details className="text-lg ml-2">
                 <summary>Sources</summary>
-                {theGuardianSources.length > 0 &&
-                  theGuardianSources.map((eachSource) => {
+                {newsSources.TheGuardianAPI.sources.length > 0 &&
+                  newsSources.TheGuardianAPI.sources.map((eachSource) => {
                     return (
                       <div
                         key={eachSource.id}
@@ -409,8 +407,8 @@ function News() {
               <summary>Filters</summary>
               <details className="text-lg ml-2">
                 <summary>Sources</summary>
-                {newYorkTimesSources.length > 0 &&
-                  newYorkTimesSources.map((eachSource) => {
+                {newsSources.NewYorkTimesAPI.sources.length > 0 &&
+                  newsSources.NewYorkTimesAPI.sources.map((eachSource) => {
                     return (
                       <div
                         key={eachSource.id}

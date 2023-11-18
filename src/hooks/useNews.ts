@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { newsSources } from "const/news";
 import axios from "axios";
 import defaultImg from "assets/default-img.png";
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState } from "react";
 import { urlFormatter } from "helpers/formatter";
 import { storageKeys } from "const/storage";
 import type { DateFilters, News, QueryStatus, Source } from "types";
@@ -81,53 +81,19 @@ function useNews() {
   const [enabledSources, setEnabledSources] = useState<string[]>(
     enabledSourcesInStorage ? JSON.parse(enabledSourcesInStorage) : []
   );
-  const theGuardianSources = useMemo(
-    () => [
-      {
-        id: "uk",
-        name: "The Guardian UK",
-      },
-      {
-        id: "us",
-        name: "The Guardian US",
-      },
-      {
-        id: "aus",
-        name: "The Guardian Australia",
-      },
-    ],
-    []
-  );
-  const newYorkTimesSources = useMemo(
-    () => [
-      {
-        id: "The New York Times",
-        name: "The New York Times",
-      },
-      {
-        id: "International New York Times",
-        name: "International New York Times",
-      },
-      {
-        id: "International Herald Tribune",
-        name: "International Herald Tribune",
-      },
-    ],
-    []
-  );
   const [enabledSourcesTheGuardian, setEnabledSourcesTheGuardian] = useState<
     string[]
   >(
     enabledSourcesTheGuardianInStorage
       ? JSON.parse(enabledSourcesTheGuardianInStorage)
-      : theGuardianSources.map((eachSource) => eachSource.id)
+      : newsSources.TheGuardianAPI.sources.map((eachSource) => eachSource.id)
   );
   const [enabledSourcesNewYorkTimes, setEnabledSourcesNewYorkTimes] = useState<
     string[]
   >(
     enabledSourcesNewYorkTimesInStorage
       ? JSON.parse(enabledSourcesNewYorkTimesInStorage)
-      : newYorkTimesSources.map((eachSource) => eachSource.id)
+      : newsSources.NewYorkTimesAPI.sources.map((eachSource) => eachSource.id)
   );
   const [enabledCategoryNewsAPI, setEnabledCategoryNewsAPI] = useState<string>(
     enabledCategoryNewsAPIInStorage ? enabledCategoryNewsAPIInStorage : "all"
@@ -484,9 +450,11 @@ function useNews() {
   }, [enabledCategoryTheGuardian]);
   useEffect(() => {
     if (!enabledSourcesTheGuardianInStorage) {
-      const newEnabledSources = theGuardianSources.map((fetchedSource) => {
-        return fetchedSource.id;
-      });
+      const newEnabledSources = newsSources.TheGuardianAPI.sources.map(
+        (fetchedSource) => {
+          return fetchedSource.id;
+        }
+      );
       if (newEnabledSources && newEnabledSources.length > 0) {
         localStorage.setItem(
           storageKeys.enabledSourcesTheGuardianStorageKey,
@@ -494,7 +462,7 @@ function useNews() {
         );
       }
     }
-  }, [theGuardianSources, enabledSourcesTheGuardianInStorage]);
+  }, [enabledSourcesTheGuardianInStorage]);
   useEffect(() => {
     localStorage.setItem(
       storageKeys.enabledSourcesTheGuardianStorageKey,
@@ -509,9 +477,11 @@ function useNews() {
   }, [enabledCategoryNewYorkTimes]);
   useEffect(() => {
     if (!enabledSourcesNewYorkTimesInStorage) {
-      const newEnabledSources = newYorkTimesSources.map((fetchedSource) => {
-        return fetchedSource.id;
-      });
+      const newEnabledSources = newsSources.NewYorkTimesAPI.sources.map(
+        (fetchedSource) => {
+          return fetchedSource.id;
+        }
+      );
       if (newEnabledSources && newEnabledSources.length > 0) {
         localStorage.setItem(
           storageKeys.enabledSourcesNewYorkTimesStorageKey,
@@ -519,7 +489,7 @@ function useNews() {
         );
       }
     }
-  }, [newYorkTimesSources, enabledSourcesNewYorkTimesInStorage]);
+  }, [enabledSourcesNewYorkTimesInStorage]);
   useEffect(() => {
     localStorage.setItem(
       storageKeys.enabledSourcesNewYorkTimesStorageKey,
@@ -700,14 +670,12 @@ function useNews() {
     modifyCategoryTheGuardian,
     modifySourceTheGuardian,
     enabledSourcesTheGuardian,
-    theGuardianSources,
     newYorkTimesNewsQueryResult,
     newYorkTimesQueryStatus,
     enabledCategoryNewYorkTimes,
     modifyCategoryNewYorkTimes,
     modifySourceNewYorkTimes,
     enabledSourcesNewYorkTimes,
-    newYorkTimesSources,
     setQueryStatus,
     setTheGuardianQueryStatus,
     setNewYorkTimesQueryStatus,

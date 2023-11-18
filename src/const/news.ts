@@ -14,11 +14,20 @@ const newsSources = {
       "Technology",
     ],
   },
-  NEWSSOURCE2: {
-    friendlyName: "NEWSSOURCE2",
-    url: "www.exmaple2.com",
-    apiKey: "",
-    categories: [],
+  TheGuardianAPI: {
+    friendlyName: "The Guardian",
+    url: "https://content.guardianapis.com/search",
+    apiKey: "491736bc-c681-4410-af41-bfe41ebf000d",
+    categories: [
+      "All",
+      "Business",
+      "Education",
+      "Games",
+      "Culture",
+      "Science",
+      "Sport",
+      "Technology",
+    ],
   },
   NEWSSOURCE3: {
     friendlyName: "NEWSSOURCE3",

@@ -9,7 +9,6 @@ type Source = {
 type Props = {
   imageLink: string;
   title: string;
-  description: string;
   author: string;
   date: Date;
   source: Source;
@@ -21,14 +20,13 @@ type Props = {
 };
 
 const classNames = {
-  titleWithIcon: "text-sm flex flex-row items-center mr-3",
+  titleWithIcon: "text-sm flex flex-row items-center mr-3 truncate pr-2",
   icons: "w-3 mr-1",
 };
 
 function Card({
   imageLink,
   title,
-  description,
   author,
   date,
   source,
@@ -39,20 +37,20 @@ function Card({
   favoriteSourceModifyFn,
 }: Props) {
   return (
-    <div className="flex flex-col h-max">
+    <div className="flex flex-col h-max w-full max-w-full">
       <a
         href={url}
         target="_blank"
-        className="text-left flex flex-col lg:flex-row justify-start shadow hover:shadow-lg border border-gray-400 max-h-fit h-fit mx-3 lg:mx-0 lg:max-h-48 lg:h-48 will-change-transform hover:scale-105 transition bg-white"
-        title={description || title}>
+        className="text-left flex flex-col lg:flex-row justify-start shadow hover:shadow-lg border border-gray-400 max-h-fit h-fit mx-3 lg:mx-0 lg:max-h-48 lg:h-48 will-change-transform w-full max-w-full hover:scale-105 transition bg-white"
+        title={title}>
         <img
           src={imageLink}
           alt={`Innoscripta News - ${title} image`}
           className="w-100 lg:w-52"
         />
-        <div className="flex flex-col items-start p-3 justify-between">
+        <div className="flex flex-col items-start p-3 justify-between max-w-full overflow-hidden">
           <p className="text-xl text-innoscripta">{title}</p>
-          <div className="flex flex-col justify-end">
+          <div className="flex flex-col items-start max-w-full truncate">
             <p className={classNames.titleWithIcon}>
               <span className={classNames.icons}>
                 <Icon type="Person" />

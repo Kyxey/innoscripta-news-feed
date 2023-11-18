@@ -5,6 +5,7 @@ import axios from "axios";
 import defaultImg from "assets/default-img.png";
 import { useEffect, useState, useMemo } from "react";
 import { urlFormatter } from "helpers/formatter";
+import { storageKeys } from "const/storage";
 
 type Source = {
   id: string;
@@ -32,47 +33,38 @@ type DateFilters = {
 };
 
 function useNews() {
-  const queryStatusStorageKey = "NewsQStatus";
-  const queryStatusInStorage = localStorage.getItem(queryStatusStorageKey);
-  const theGuardianQueryStatusStorageKey = "TheGuardianNewsQStatus";
+  const queryStatusInStorage = localStorage.getItem(
+    storageKeys.queryStatusStorageKey
+  );
   const theGuardianQueryStatusInStorage = localStorage.getItem(
-    theGuardianQueryStatusStorageKey
+    storageKeys.theGuardianQueryStatusStorageKey
   );
-  const newYorkTimesQueryStatusStorageKey = "NewYorkTimesNewsQStatus";
   const newYorkTimesQueryStatusInStorage = localStorage.getItem(
-    newYorkTimesQueryStatusStorageKey
+    storageKeys.newYorkTimesQueryStatusStorageKey
   );
-  const enabledSourcesStorageKey = "NewsSources";
   const enabledSourcesInStorage = localStorage.getItem(
-    enabledSourcesStorageKey
+    storageKeys.enabledSourcesStorageKey
   );
-  const enabledSourcesTheGuardianStorageKey = "TheGuardianNewsSources";
   const enabledSourcesTheGuardianInStorage = localStorage.getItem(
-    enabledSourcesTheGuardianStorageKey
+    storageKeys.enabledSourcesTheGuardianStorageKey
   );
-  const enabledSourcesNewYorkTimesStorageKey = "NewYorkTimesNewsSources";
   const enabledSourcesNewYorkTimesInStorage = localStorage.getItem(
-    enabledSourcesNewYorkTimesStorageKey
+    storageKeys.enabledSourcesNewYorkTimesStorageKey
   );
-  const enabledCategoryNewsAPIStorageKey = "NewsAPI-News-Categories";
   const enabledCategoryNewsAPIInStorage = localStorage.getItem(
-    enabledCategoryNewsAPIStorageKey
+    storageKeys.enabledCategoryNewsAPIStorageKey
   );
-  const enabledCategoryTheGuardianStorageKey = "Guardian-News-Categories";
   const enabledCategoryTheGuardianInStorage = localStorage.getItem(
-    enabledCategoryTheGuardianStorageKey
+    storageKeys.enabledCategoryTheGuardianStorageKey
   );
-  const enabledCategoryNewYorkTimesStorageKey = "NewYorkTimes-News-Categories";
   const enabledCategoryNewYorkTimesInStorage = localStorage.getItem(
-    enabledCategoryNewYorkTimesStorageKey
+    storageKeys.enabledCategoryNewYorkTimesStorageKey
   );
-  const favoriteAuthorsStorageKey = "My-Feed-Favorite-Authors";
   const favoriteAuthorsInStorage = localStorage.getItem(
-    favoriteAuthorsStorageKey
+    storageKeys.favoriteAuthorsStorageKey
   );
-  const favoriteSourcesStorageKey = "My-Feed-Favorite-Sources";
   const favoriteSourcesInStorage = localStorage.getItem(
-    favoriteSourcesStorageKey
+    storageKeys.favoriteSourcesStorageKey
   );
 
   const [queryStatus, setQueryStatus] = useState<QueryStatus>(
@@ -206,7 +198,7 @@ function useNews() {
             });
             if (newEnabledSources && newEnabledSources.length > 0) {
               localStorage.setItem(
-                enabledSourcesStorageKey,
+                storageKeys.enabledSourcesStorageKey,
                 JSON.stringify(newEnabledSources)
               );
             }
@@ -475,39 +467,42 @@ function useNews() {
   });
 
   useEffect(() => {
-    localStorage.setItem(queryStatusStorageKey, JSON.stringify(queryStatus));
+    localStorage.setItem(
+      storageKeys.queryStatusStorageKey,
+      JSON.stringify(queryStatus)
+    );
   }, [queryStatus]);
   useEffect(() => {
     if (enabledSources.length > 0) {
       localStorage.setItem(
-        enabledSourcesStorageKey,
+        storageKeys.enabledSourcesStorageKey,
         JSON.stringify(enabledSources)
       );
     } else {
-      localStorage.removeItem(enabledSourcesStorageKey);
+      localStorage.removeItem(storageKeys.enabledSourcesStorageKey);
     }
   }, [enabledSources]);
   useEffect(() => {
     localStorage.setItem(
-      enabledCategoryNewsAPIStorageKey,
+      storageKeys.enabledCategoryNewsAPIStorageKey,
       enabledCategoryNewsAPI
     );
   }, [enabledCategoryNewsAPI]);
   useEffect(() => {
     localStorage.setItem(
-      theGuardianQueryStatusStorageKey,
+      storageKeys.theGuardianQueryStatusStorageKey,
       JSON.stringify(theGuardianQueryStatus)
     );
   }, [theGuardianQueryStatus]);
   useEffect(() => {
     localStorage.setItem(
-      newYorkTimesQueryStatusStorageKey,
+      storageKeys.newYorkTimesQueryStatusStorageKey,
       JSON.stringify(newYorkTimesQueryStatus)
     );
   }, [newYorkTimesQueryStatus]);
   useEffect(() => {
     localStorage.setItem(
-      enabledCategoryTheGuardianStorageKey,
+      storageKeys.enabledCategoryTheGuardianStorageKey,
       enabledCategoryTheGuardian
     );
   }, [enabledCategoryTheGuardian]);
@@ -518,25 +513,21 @@ function useNews() {
       });
       if (newEnabledSources && newEnabledSources.length > 0) {
         localStorage.setItem(
-          enabledSourcesTheGuardianStorageKey,
+          storageKeys.enabledSourcesTheGuardianStorageKey,
           JSON.stringify(newEnabledSources)
         );
       }
     }
-  }, [
-    theGuardianSources,
-    enabledSourcesTheGuardianInStorage,
-    enabledSourcesTheGuardianStorageKey,
-  ]);
+  }, [theGuardianSources, enabledSourcesTheGuardianInStorage]);
   useEffect(() => {
     localStorage.setItem(
-      enabledSourcesTheGuardianStorageKey,
+      storageKeys.enabledSourcesTheGuardianStorageKey,
       JSON.stringify(enabledSourcesTheGuardian)
     );
   }, [enabledSourcesTheGuardian]);
   useEffect(() => {
     localStorage.setItem(
-      enabledCategoryNewYorkTimesStorageKey,
+      storageKeys.enabledCategoryNewYorkTimesStorageKey,
       enabledCategoryNewYorkTimes
     );
   }, [enabledCategoryNewYorkTimes]);
@@ -547,31 +538,27 @@ function useNews() {
       });
       if (newEnabledSources && newEnabledSources.length > 0) {
         localStorage.setItem(
-          enabledSourcesNewYorkTimesStorageKey,
+          storageKeys.enabledSourcesNewYorkTimesStorageKey,
           JSON.stringify(newEnabledSources)
         );
       }
     }
-  }, [
-    newYorkTimesSources,
-    enabledSourcesNewYorkTimesInStorage,
-    enabledSourcesNewYorkTimesStorageKey,
-  ]);
+  }, [newYorkTimesSources, enabledSourcesNewYorkTimesInStorage]);
   useEffect(() => {
     localStorage.setItem(
-      enabledSourcesNewYorkTimesStorageKey,
+      storageKeys.enabledSourcesNewYorkTimesStorageKey,
       JSON.stringify(enabledSourcesNewYorkTimes)
     );
   }, [enabledSourcesNewYorkTimes]);
   useEffect(() => {
     localStorage.setItem(
-      favoriteSourcesStorageKey,
+      storageKeys.favoriteSourcesStorageKey,
       JSON.stringify(favoriteSources)
     );
   }, [favoriteSources]);
   useEffect(() => {
     localStorage.setItem(
-      favoriteAuthorsStorageKey,
+      storageKeys.favoriteAuthorsStorageKey,
       JSON.stringify(favoriteAuthors)
     );
   }, [favoriteAuthors]);

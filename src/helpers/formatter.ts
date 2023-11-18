@@ -20,10 +20,14 @@ function urlFormatter(
     };
   }
 ) {
+  let srcs = "",
+    fq = "";
+  const isCategoryNeeded = config.filters.category.toLowerCase() !== "all";
+
   switch (type) {
     case "NewsAPI":
       return `${config.baseURL}?${
-        config.filters.category !== "all"
+        isCategoryNeeded
           ? `category=${config.filters.category}`
           : `sources=${config.sources.toString()}`
       }&${
@@ -43,11 +47,7 @@ function urlFormatter(
         config.sources.length > 0
           ? `production-office=${config.sources.join("|").toString()}&`
           : ""
-      }${
-        config.filters.category !== "all"
-          ? `section=${config.filters.category}&`
-          : ""
-      }${
+      }${isCategoryNeeded ? `section=${config.filters.category}&` : ""}${
         config.searchQuery ? `q=${encodeURI(config.searchQuery)}&` : ""
       }page-size=${config.queryStatus.limit}&page=${
         config.queryStatus.page
@@ -61,19 +61,40 @@ function urlFormatter(
           : ""
       }api-key=${config.apiKey}`;
 
-    case "NEWSSOURCE3":
-      // TODO:
-      return `${config.baseURL}?sources=${config.sources.toString()}&${
-        config.searchQuery ? `q=${encodeURI(config.searchQuery)}&` : ""
-      }pageSize=${config.queryStatus.limit}&page=${config.queryStatus.page}&${
+    case "NewYorkTimesAPI":
+      config.sources.forEach((eachSource, i) => {
+        srcs += `"${eachSource}"${i === config.sources.length - 1 ? "" : ", "}`;
+      });
+
+      if (srcs || isCategoryNeeded) {
+        if (srcs) {
+          fq += `source:(${srcs})${isCategoryNeeded ? " AND " : ""} `;
+        }
+
+        if (isCategoryNeeded) {
+          fq += `news_desk:("${config.filters.category}")`;
+        }
+      }
+
+      return `${config.baseURL}?${
+        srcs || config.filters.category ? `fq=${fq}&` : ""
+      }${config.searchQuery ? `q=${encodeURI(config.searchQuery)}&` : ""}page=${
+        config.queryStatus.page
+      }&${
         config.filters.date.from
-          ? `from=${config.filters.date.from.toISOString()}&`
+          ? `begin_date=${config.filters.date.from
+              .toISOString()
+              .slice(0, 10)
+              .replace(/-/g, "")}&`
           : ""
       }${
         config.filters.date.to
-          ? `to=${config.filters.date.to.toISOString()}&`
+          ? `end_date=${config.filters.date.to
+              .toISOString()
+              .slice(0, 10)
+              .replace(/-/g, "")}&`
           : ""
-      }apiKey=${config.apiKey}`;
+      }sort=newest&api-key=${config.apiKey}`;
   }
 }
 

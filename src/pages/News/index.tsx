@@ -82,7 +82,6 @@ const processResult = (
     queryResult.isLoadingError ||
     queryResult.isRefetchError
   ) {
-    console.log(queryResult);
     return <Error />;
   } else if (
     queryResult.isRefetching ||
@@ -124,6 +123,15 @@ function News() {
     theGuardianNewsQueryResult,
     theGuardianQueryStatus,
     theGuardianSources,
+    newYorkTimesNewsQueryResult,
+    newYorkTimesQueryStatus,
+    prevPageNewYorkTimes,
+    nextPageNewYorkTimes,
+    enabledCategoryNewYorkTimes,
+    modifyCategoryNewYorkTimes,
+    modifySourceNewYorkTimes,
+    enabledSourcesNewYorkTimes,
+    newYorkTimesSources,
   } = useNews();
 
   return (
@@ -365,6 +373,91 @@ function News() {
           theGuardianQueryStatus,
           nextPageTheGuardian,
           prevPageTheGuardian,
+          searchQueryForKey,
+          {
+            favoriteAuthors: favoriteAuthors,
+            favoriteSources: favoriteSources,
+            favoriteAuthorModifyFn: modifyFavoriteAuthors,
+            favoriteSourceModifyFn: modifyFavoriteSources,
+          }
+        )}
+        <div></div>
+      </section>
+
+      {/* New York Times */}
+      <p className="text-left border border-t-0 border-x-0 w-1/2 text-innoscripta text-4xl ml-12 border-b-gray-300">
+        <b>{newsSources.NewYorkTimesAPI.friendlyName}</b>
+      </p>
+      <section className="grid grid-cols-1 grids-rows-3 lg:grid-cols-3 min-h-max">
+        <div className="flex justify-center h-fit min-h-max">
+          <div className="text-left w-3/4 h-1/2 overflow-scroll border border-innoscripta rounded p-4">
+            <details className="cursor-pointer text-2xl">
+              <summary>Filters</summary>
+              <details className="text-lg ml-2">
+                <summary>Sources</summary>
+                {newYorkTimesSources.length > 0 &&
+                  newYorkTimesSources.map((eachSource) => {
+                    return (
+                      <div
+                        key={eachSource.id}
+                        className="cursor-pointer ml-4">
+                        <input
+                          type="checkbox"
+                          className="mr-1 cursor-pointer"
+                          name={eachSource.id}
+                          value={eachSource.id}
+                          checked={enabledSourcesNewYorkTimes.includes(
+                            eachSource.id
+                          )}
+                          onChange={() =>
+                            modifySourceNewYorkTimes(eachSource.id)
+                          }
+                        />
+                        <label
+                          onClick={() =>
+                            modifySourceNewYorkTimes(eachSource.id)
+                          }
+                          className="cursor-pointer">
+                          {eachSource.name}
+                        </label>
+                      </div>
+                    );
+                  })}
+              </details>
+              <details className="text-lg ml-2">
+                <summary>Categories</summary>
+                {newsSources.NewYorkTimesAPI.categories.map((eachCategory) => {
+                  return (
+                    <div
+                      key={`NewYorkTimes-Category-${eachCategory}`}
+                      className="cursor-pointer ml-4">
+                      <input
+                        type="radio"
+                        className="mr-1 cursor-pointer"
+                        name={eachCategory}
+                        value={eachCategory}
+                        checked={enabledCategoryNewYorkTimes == eachCategory}
+                        onChange={() =>
+                          modifyCategoryNewYorkTimes(eachCategory)
+                        }
+                      />
+                      <label
+                        onClick={() => modifyCategoryNewYorkTimes(eachCategory)}
+                        className="cursor-pointer">
+                        {eachCategory}
+                      </label>
+                    </div>
+                  );
+                })}
+              </details>
+            </details>
+          </div>
+        </div>
+        {processResult(
+          newYorkTimesNewsQueryResult,
+          newYorkTimesQueryStatus,
+          nextPageNewYorkTimes,
+          prevPageNewYorkTimes,
           searchQueryForKey,
           {
             favoriteAuthors: favoriteAuthors,

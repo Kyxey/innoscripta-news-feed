@@ -38,6 +38,10 @@ function useNews() {
   const theGuardianQueryStatusInStorage = localStorage.getItem(
     theGuardianQueryStatusStorageKey
   );
+  const newYorkTimesQueryStatusStorageKey = "NewYorkTimesNewsQStatus";
+  const newYorkTimesQueryStatusInStorage = localStorage.getItem(
+    newYorkTimesQueryStatusStorageKey
+  );
   const enabledSourcesStorageKey = "NewsSources";
   const enabledSourcesInStorage = localStorage.getItem(
     enabledSourcesStorageKey
@@ -46,6 +50,10 @@ function useNews() {
   const enabledSourcesTheGuardianInStorage = localStorage.getItem(
     enabledSourcesTheGuardianStorageKey
   );
+  const enabledSourcesNewYorkTimesStorageKey = "NewYorkTimesNewsSources";
+  const enabledSourcesNewYorkTimesInStorage = localStorage.getItem(
+    enabledSourcesNewYorkTimesStorageKey
+  );
   const enabledCategoryNewsAPIStorageKey = "NewsAPI-News-Categories";
   const enabledCategoryNewsAPIInStorage = localStorage.getItem(
     enabledCategoryNewsAPIStorageKey
@@ -53,6 +61,10 @@ function useNews() {
   const enabledCategoryTheGuardianStorageKey = "Guardian-News-Categories";
   const enabledCategoryTheGuardianInStorage = localStorage.getItem(
     enabledCategoryTheGuardianStorageKey
+  );
+  const enabledCategoryNewYorkTimesStorageKey = "NewYorkTimes-News-Categories";
+  const enabledCategoryNewYorkTimesInStorage = localStorage.getItem(
+    enabledCategoryNewYorkTimesStorageKey
   );
   const favoriteAuthorsStorageKey = "My-Feed-Favorite-Authors";
   const favoriteAuthorsInStorage = localStorage.getItem(
@@ -67,7 +79,7 @@ function useNews() {
     queryStatusInStorage
       ? JSON.parse(queryStatusInStorage)
       : {
-          limit: 6,
+          limit: 10,
           page: 1,
           total: 0,
         }
@@ -77,7 +89,17 @@ function useNews() {
       theGuardianQueryStatusInStorage
         ? JSON.parse(theGuardianQueryStatusInStorage)
         : {
-            limit: 6,
+            limit: 10,
+            page: 1,
+            total: 0,
+          }
+    );
+  const [newYorkTimesQueryStatus, setNewYorkTimesQueryStatus] =
+    useState<QueryStatus>(
+      newYorkTimesQueryStatusInStorage
+        ? JSON.parse(newYorkTimesQueryStatusInStorage)
+        : {
+            limit: 10,
             page: 1,
             total: 0,
           }
@@ -108,12 +130,36 @@ function useNews() {
     ],
     []
   );
+  const newYorkTimesSources = useMemo(
+    () => [
+      {
+        id: "The New York Times",
+        name: "The New York Times",
+      },
+      {
+        id: "International New York Times",
+        name: "International New York Times",
+      },
+      {
+        id: "International Herald Tribune",
+        name: "International Herald Tribune",
+      },
+    ],
+    []
+  );
   const [enabledSourcesTheGuardian, setEnabledSourcesTheGuardian] = useState<
     string[]
   >(
     enabledSourcesTheGuardianInStorage
       ? JSON.parse(enabledSourcesTheGuardianInStorage)
       : theGuardianSources.map((eachSource) => eachSource.id)
+  );
+  const [enabledSourcesNewYorkTimes, setEnabledSourcesNewYorkTimes] = useState<
+    string[]
+  >(
+    enabledSourcesNewYorkTimesInStorage
+      ? JSON.parse(enabledSourcesNewYorkTimesInStorage)
+      : newYorkTimesSources.map((eachSource) => eachSource.id)
   );
   const [enabledCategoryNewsAPI, setEnabledCategoryNewsAPI] = useState<string>(
     enabledCategoryNewsAPIInStorage ? enabledCategoryNewsAPIInStorage : "all"
@@ -122,6 +168,12 @@ function useNews() {
     useState<string>(
       enabledCategoryTheGuardianInStorage
         ? enabledCategoryTheGuardianInStorage
+        : "all"
+    );
+  const [enabledCategoryNewYorkTimes, setEnabledCategoryNewYorkTimes] =
+    useState<string>(
+      enabledCategoryNewYorkTimesInStorage
+        ? enabledCategoryNewYorkTimesInStorage
         : "all"
     );
   const [favoriteSources, setFavoriteSources] = useState<Source[]>(
@@ -306,6 +358,79 @@ function useNews() {
         return [];
       });
   };
+  const fetchNewYorkTimesNews = () => {
+    const newsSource = newsSources["NewYorkTimesAPI"];
+    return axios
+      .get(
+        urlFormatter("NewYorkTimesAPI", {
+          baseURL: newsSource.url,
+          apiKey: newsSource.apiKey,
+          sources: enabledSourcesNewYorkTimes,
+          searchQuery: searchQueryForKey,
+          queryStatus: {
+            limit: newYorkTimesQueryStatus.limit,
+            page: newYorkTimesQueryStatus.page,
+          },
+          filters: {
+            date: {
+              from: dateFilters.from,
+              to: dateFilters.to,
+            },
+            category: enabledCategoryNewYorkTimes,
+          },
+        })
+      )
+      .then((result) => {
+        if (result.status == 200) {
+          const aggregatedResult = {
+            news: result.data.response.docs,
+          };
+
+          setNewYorkTimesQueryStatus({
+            ...newYorkTimesQueryStatus,
+            total: parseInt(result.data.response.meta.hits) || 1,
+          });
+
+          if (aggregatedResult.news && aggregatedResult.news.length > 0) {
+            const news: News[] = [];
+            aggregatedResult.news.forEach(
+              (newsAPIResult: {
+                source: string;
+                headline: { main: string };
+                pub_date: string | number | Date;
+                byline: {
+                  original: string;
+                };
+                web_url: string;
+                multimedia: { url: string }[];
+              }) => {
+                const newSource = {
+                  id: newsAPIResult.source,
+                  name: newsAPIResult.source,
+                };
+                news.push({
+                  title: newsAPIResult.headline.main,
+                  createdAt: new Date(newsAPIResult.pub_date),
+                  author: newsAPIResult.byline.original
+                    ? newsAPIResult.byline.original.replace("By ", "")
+                    : newsAPIResult.source,
+                  source: newSource,
+                  url: newsAPIResult.web_url || "",
+                  image:
+                    newsAPIResult.multimedia.length > 0
+                      ? `https://www.nytimes.com/${newsAPIResult.multimedia[0].url}`
+                      : defaultImg,
+                });
+              }
+            );
+
+            return news;
+          }
+        }
+
+        return [];
+      });
+  };
 
   const sources = useQuery<Source[]>({
     queryKey: ["SOURCES"],
@@ -336,6 +461,18 @@ function useNews() {
     queryFn: fetchGuardianNews,
     staleTime: 60 * 1000,
   });
+  const newYorkTimesNewsQueryResult = useQuery<News[]>({
+    queryKey: [
+      "NEWYORKTIMESAPI",
+      newYorkTimesQueryStatus.page,
+      enabledSourcesNewYorkTimes,
+      searchQueryForKey,
+      dateFilters,
+      enabledCategoryNewYorkTimes,
+    ],
+    queryFn: fetchNewYorkTimesNews,
+    staleTime: 60 * 1000,
+  });
 
   useEffect(() => {
     localStorage.setItem(queryStatusStorageKey, JSON.stringify(queryStatus));
@@ -362,6 +499,12 @@ function useNews() {
       JSON.stringify(theGuardianQueryStatus)
     );
   }, [theGuardianQueryStatus]);
+  useEffect(() => {
+    localStorage.setItem(
+      newYorkTimesQueryStatusStorageKey,
+      JSON.stringify(newYorkTimesQueryStatus)
+    );
+  }, [newYorkTimesQueryStatus]);
   useEffect(() => {
     localStorage.setItem(
       enabledCategoryTheGuardianStorageKey,
@@ -391,6 +534,35 @@ function useNews() {
       JSON.stringify(enabledSourcesTheGuardian)
     );
   }, [enabledSourcesTheGuardian]);
+  useEffect(() => {
+    localStorage.setItem(
+      enabledCategoryNewYorkTimesStorageKey,
+      enabledCategoryNewYorkTimes
+    );
+  }, [enabledCategoryNewYorkTimes]);
+  useEffect(() => {
+    if (!enabledSourcesNewYorkTimesInStorage) {
+      const newEnabledSources = newYorkTimesSources.map((fetchedSource) => {
+        return fetchedSource.id;
+      });
+      if (newEnabledSources && newEnabledSources.length > 0) {
+        localStorage.setItem(
+          enabledSourcesNewYorkTimesStorageKey,
+          JSON.stringify(newEnabledSources)
+        );
+      }
+    }
+  }, [
+    newYorkTimesSources,
+    enabledSourcesNewYorkTimesInStorage,
+    enabledSourcesNewYorkTimesStorageKey,
+  ]);
+  useEffect(() => {
+    localStorage.setItem(
+      enabledSourcesNewYorkTimesStorageKey,
+      JSON.stringify(enabledSourcesNewYorkTimes)
+    );
+  }, [enabledSourcesNewYorkTimes]);
   useEffect(() => {
     localStorage.setItem(
       favoriteSourcesStorageKey,
@@ -471,6 +643,25 @@ function useNews() {
       });
     }
   };
+  const nextPageNewYorkTimes = () => {
+    if (
+      newYorkTimesQueryStatus.limit * newYorkTimesQueryStatus.page <
+      newYorkTimesQueryStatus.total
+    ) {
+      setNewYorkTimesQueryStatus({
+        ...newYorkTimesQueryStatus,
+        page: newYorkTimesQueryStatus.page + 1,
+      });
+    }
+  };
+  const prevPageNewYorkTimes = () => {
+    if (newYorkTimesQueryStatus.page > 1) {
+      setNewYorkTimesQueryStatus({
+        ...newYorkTimesQueryStatus,
+        page: newYorkTimesQueryStatus.page - 1,
+      });
+    }
+  };
   const modifySourceTheGuardian = (sourceID: string) => {
     let newSources: string[];
     if (enabledSourcesTheGuardian.includes(sourceID)) {
@@ -485,12 +676,36 @@ function useNews() {
       total: 0,
     });
   };
+  const modifySourceNewYorkTimes = (sourceID: string) => {
+    let newSources: string[];
+    if (enabledSourcesNewYorkTimes.includes(sourceID)) {
+      newSources = enabledSourcesNewYorkTimes.filter((val) => val !== sourceID);
+    } else {
+      newSources = [...enabledSourcesNewYorkTimes, sourceID];
+    }
+    setEnabledSourcesNewYorkTimes(newSources);
+    setNewYorkTimesQueryStatus({
+      ...newYorkTimesQueryStatus,
+      page: 1,
+      total: 0,
+    });
+  };
   const modifyCategoryTheGuardian = (category: string) => {
     const categoryID = category.toLowerCase();
     setEnabledCategoryTheGuardian(categoryID);
 
     setTheGuardianQueryStatus({
       ...theGuardianQueryStatus,
+      page: 1,
+      total: 0,
+    });
+  };
+  const modifyCategoryNewYorkTimes = (category: string) => {
+    const categoryID = category;
+    setEnabledCategoryNewYorkTimes(categoryID);
+
+    setNewYorkTimesQueryStatus({
+      ...newYorkTimesQueryStatus,
       page: 1,
       total: 0,
     });
@@ -583,6 +798,15 @@ function useNews() {
     modifySourceTheGuardian,
     enabledSourcesTheGuardian,
     theGuardianSources,
+    newYorkTimesNewsQueryResult,
+    newYorkTimesQueryStatus,
+    prevPageNewYorkTimes,
+    nextPageNewYorkTimes,
+    enabledCategoryNewYorkTimes,
+    modifyCategoryNewYorkTimes,
+    modifySourceNewYorkTimes,
+    enabledSourcesNewYorkTimes,
+    newYorkTimesSources,
   };
 }
 

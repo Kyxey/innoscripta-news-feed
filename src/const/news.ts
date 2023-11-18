@@ -29,11 +29,19 @@ const newsSources = {
       "Technology",
     ],
   },
-  NEWSSOURCE3: {
-    friendlyName: "NEWSSOURCE3",
-    url: "www.exmaple3.com",
-    apiKey: "",
-    categories: [],
+  NewYorkTimesAPI: {
+    friendlyName: "New York Times",
+    url: "https://api.nytimes.com/svc/search/v2/articlesearch.json",
+    apiKey: "zK9LZgGGI1iaNsAVWNxnMdY6AgzAUJZs",
+    categories: [
+      "All",
+      "Arts",
+      "Books",
+      "Business",
+      "Education",
+      "Food",
+      "Health",
+    ],
   },
 } as const;
 

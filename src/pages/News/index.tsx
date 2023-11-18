@@ -1,5 +1,10 @@
 import Header from "components/Header";
-import { useNews, type News, type QueryStatus, type Source } from "./useNews";
+import {
+  useNews,
+  type News,
+  type QueryStatus,
+  type Source,
+} from "../../hooks/useNews";
 import type { UseQueryResult } from "@tanstack/react-query";
 import Card from "components/Card";
 import Error from "components/Error";

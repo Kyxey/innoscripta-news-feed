@@ -1,5 +1,5 @@
 import { useEffect, useState, type KeyboardEvent } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, type UseQueryResult } from "@tanstack/react-query";
 import { newsSources } from "const/news";
 import axios from "axios";
 import defaultImg from "assets/default-img.png";
@@ -417,6 +417,57 @@ function useNews() {
     resetQueryStatusTheGuardian();
     resetQueryStatusNewYorkTimes();
   };
+  const combineQueries = (queries: UseQueryResult<News[]>[]) => {
+    // @ts-expect-error "This is intentional to be able to combine these queries"
+    const combinedQuery: UseQueryResult<News[]> = {
+      data: queries.flatMap((eachQuery) => eachQuery.data || []),
+      dataUpdatedAt: queries[0].dataUpdatedAt,
+      error: queries.find((eachQuery) => eachQuery.error)?.error || null,
+      errorUpdateCount: queries[0].errorUpdateCount,
+      errorUpdatedAt: queries[0].errorUpdatedAt,
+      failureCount: queries[0].failureCount,
+      failureReason: queries[0].failureReason,
+      fetchStatus: queries[0].fetchStatus,
+      isError: queries.some((eachQuery) => eachQuery.isError),
+      isLoading: queries.some((eachQuery) => eachQuery.isLoading),
+      isFetching: queries.some((eachQuery) => eachQuery.isFetching),
+      isFetched: queries.some((eachQuery) => eachQuery.isFetched),
+      isSuccess: queries.every((eachQuery) => eachQuery.isSuccess),
+      isPending: queries.some((eachQuery) => eachQuery.isPending),
+      isPaused: queries.some((eachQuery) => eachQuery.isPaused),
+      isLoadingError: queries.every((eachQuery) => eachQuery.isLoadingError),
+      isFetchedAfterMount: queries.some(
+        (eachQuery) => eachQuery.isFetchedAfterMount
+      ),
+      isPlaceholderData: queries.some(
+        (eachQuery) => eachQuery.isPlaceholderData
+      ),
+      isRefetchError: queries.some((eachQuery) => eachQuery.isRefetchError),
+      isRefetching: queries.some((eachQuery) => eachQuery.isRefetching),
+      isStale: queries.some((eachQuery) => eachQuery.isStale),
+      refetch: queries[0].refetch,
+      status: queries[0].status,
+      isInitialLoading: queries.some((eachQuery) => eachQuery.isInitialLoading),
+    };
+
+    return combinedQuery;
+  };
+
+  const shakeDataFromQuery = (query: UseQueryResult<News[]>) => {
+    if (query.data && query.data.length > 0) {
+      query.data = query.data.filter(
+        (eachData) =>
+          favoriteAuthors.includes(eachData.author) ||
+          favoriteSources.find(
+            (eachFavoriteSource) =>
+              eachFavoriteSource.id === eachData.source.id &&
+              eachFavoriteSource.name === eachData.source.name
+          )
+      );
+    }
+
+    return query;
+  };
 
   return {
     newsQueryResult,
@@ -451,6 +502,8 @@ function useNews() {
     modifySourceNewsAPI,
     modifySourceTheGuardian,
     modifySourceNewYorkTimes,
+    combineQueries,
+    shakeDataFromQuery,
   };
 }
 

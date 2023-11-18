@@ -16,8 +16,14 @@ function renderFavoriteDetails(
       <summary>{title}</summary>
       {favoriteItems.map((eachFavoriteItems) => {
         return (
-          <div className="mt-4 text-lg cursor-default inline-block w-fit max-w-full relative truncate">
-            <div className="rounded-2xl bg-innoscripta text-white w-fit max-w-full p-2 truncate">
+          <div
+            key={`favorite-item-${title}-${
+              typeof eachFavoriteItems === "string"
+                ? eachFavoriteItems
+                : eachFavoriteItems.id
+            }`}
+            className="mt-4 text-lg cursor-default inline-block w-max max-w-full relative truncate">
+            <div className="rounded-2xl bg-innoscripta text-white w-max max-w-full p-2 truncate">
               {typeof eachFavoriteItems === "string"
                 ? eachFavoriteItems
                 : eachFavoriteItems.name}

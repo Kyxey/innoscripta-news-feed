@@ -1,6 +1,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import News from "pages/News";
+import MyFeed from "pages/MyFeed";
 import Settings from "pages/Settings";
 import NotFound from "pages/NotFound";
 import "App.css";
@@ -20,6 +21,10 @@ function App() {
             <Route
               path="/settings"
               Component={Settings}
+            />
+            <Route
+              path="/my-feed"
+              Component={MyFeed}
             />
             <Route
               path="*"

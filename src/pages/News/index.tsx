@@ -143,44 +143,41 @@ function News() {
         <div className="flex justify-center h-fit min-h-max mb-4">
           <div className="text-left w-3/4 h-1/2 overflow-scroll border border-innoscripta rounded p-4">
             <details className="cursor-pointer text-2xl mb-4">
-              <summary>General Filters</summary>
-              <details className="text-lg ml-2">
-                <summary>Date</summary>
-                <div className="cursor-pointer ml-4">
-                  <div className="mb-2">
-                    <label>From: </label>
-                    <DatePicker
-                      selected={dateFilters.from}
-                      placeholderText="Select a date..."
-                      onChange={(date) => modifyDateFilters("from", date)}
-                      onSelect={(date) => modifyDateFilters("from", date)}
-                      includeDateIntervals={[
-                        {
-                          start: new Date("1970/1/1"),
-                          end: dateFilters.to || new Date(),
-                        },
-                      ]}
-                      className="bg-white text-left p-1 text-gray-600 border border-gray-400"
-                    />
-                  </div>
-                  <div>
-                    <label>To: </label>
-                    <DatePicker
-                      selected={dateFilters.to}
-                      placeholderText="Select a date..."
-                      onChange={(date) => modifyDateFilters("to", date)}
-                      onSelect={(date) => modifyDateFilters("to", date)}
-                      includeDateIntervals={[
-                        {
-                          start: dateFilters.from || new Date("1970/1/1"),
-                          end: new Date(),
-                        },
-                      ]}
-                      className="bg-white text-left p-1 text-gray-600 border border-gray-400"
-                    />
-                  </div>
+              <summary>Date</summary>
+              <div className="cursor-pointer ml-4">
+                <div className="mb-2">
+                  <label>From: </label>
+                  <DatePicker
+                    selected={dateFilters.from}
+                    placeholderText="Select a date..."
+                    onChange={(date) => modifyDateFilters("from", date)}
+                    onSelect={(date) => modifyDateFilters("from", date)}
+                    includeDateIntervals={[
+                      {
+                        start: new Date("1970/1/1"),
+                        end: dateFilters.to || new Date(),
+                      },
+                    ]}
+                    className="bg-white text-left p-1 text-gray-600 border border-gray-400"
+                  />
                 </div>
-              </details>
+                <div>
+                  <label>To: </label>
+                  <DatePicker
+                    selected={dateFilters.to}
+                    placeholderText="Select a date..."
+                    onChange={(date) => modifyDateFilters("to", date)}
+                    onSelect={(date) => modifyDateFilters("to", date)}
+                    includeDateIntervals={[
+                      {
+                        start: dateFilters.from || new Date("1970/1/1"),
+                        end: new Date(),
+                      },
+                    ]}
+                    className="bg-white text-left p-1 text-gray-600 border border-gray-400"
+                  />
+                </div>
+              </div>
             </details>
           </div>
         </div>

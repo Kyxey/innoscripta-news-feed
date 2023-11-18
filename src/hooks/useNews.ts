@@ -1,121 +1,94 @@
-import type { KeyboardEvent } from "react";
+import { useEffect, useState, type KeyboardEvent } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { newsSources } from "const/news";
 import axios from "axios";
 import defaultImg from "assets/default-img.png";
-import { useEffect, useState } from "react";
 import { urlFormatter } from "helpers/formatter";
 import { storageKeys } from "const/storage";
-import type { DateFilters, News, QueryStatus, Source } from "types";
+import { useSettings } from "hooks/useSettings";
+import { useFavorite } from "hooks/useFavorite";
+import type { DateFilters, News, Source } from "types";
 
 function useNews() {
-  const queryStatusInStorage = localStorage.getItem(
-    storageKeys.queryStatusStorageKey
+  const {
+    queryStatus,
+    setQueryStatus,
+    enabledSources,
+    setEnabledSources,
+    enabledSourcesInStorage,
+    enabledCategory: enabledCategoryNewsAPI,
+    setEnabledCategory: setEnabledCategoryNewsAPI,
+    modifySource: modifySourceNewsAPI,
+    resetQueryStatus: resetQueryStatusNewsAPI,
+  } = useSettings(
+    {
+      queryStatusStorageKey: storageKeys.queryStatusStorageKey,
+      enabledSourcesStorageKey: storageKeys.enabledSourcesStorageKey,
+      enabledCategoryStorageKey: storageKeys.enabledCategoryNewsAPIStorageKey,
+    },
+    { sources: [], category: "all" }
   );
-  const theGuardianQueryStatusInStorage = localStorage.getItem(
-    storageKeys.theGuardianQueryStatusStorageKey
+  const {
+    queryStatus: theGuardianQueryStatus,
+    setQueryStatus: setTheGuardianQueryStatus,
+    enabledSources: enabledSourcesTheGuardian,
+    enabledCategory: enabledCategoryTheGuardian,
+    modifyCategory: modifyCategoryTheGuardian,
+    modifySource: modifySourceTheGuardian,
+    resetQueryStatus: resetQueryStatusTheGuardian,
+  } = useSettings(
+    {
+      queryStatusStorageKey: storageKeys.theGuardianQueryStatusStorageKey,
+      enabledSourcesStorageKey: storageKeys.enabledSourcesTheGuardianStorageKey,
+      enabledCategoryStorageKey:
+        storageKeys.enabledCategoryTheGuardianStorageKey,
+    },
+    {
+      sources: newsSources.TheGuardianAPI.sources.map(
+        (eachSource) => eachSource.id
+      ),
+      category: "all",
+    }
   );
-  const newYorkTimesQueryStatusInStorage = localStorage.getItem(
-    storageKeys.newYorkTimesQueryStatusStorageKey
+  const {
+    queryStatus: newYorkTimesQueryStatus,
+    setQueryStatus: setNewYorkTimesQueryStatus,
+    enabledSources: enabledSourcesNewYorkTimes,
+    enabledCategory: enabledCategoryNewYorkTimes,
+    modifyCategory: modifyCategoryNewYorkTimes,
+    modifySource: modifySourceNewYorkTimes,
+    resetQueryStatus: resetQueryStatusNewYorkTimes,
+  } = useSettings(
+    {
+      queryStatusStorageKey: storageKeys.newYorkTimesQueryStatusStorageKey,
+      enabledSourcesStorageKey:
+        storageKeys.enabledSourcesNewYorkTimesStorageKey,
+      enabledCategoryStorageKey:
+        storageKeys.enabledCategoryNewYorkTimesStorageKey,
+    },
+    {
+      sources: newsSources.NewYorkTimesAPI.sources.map(
+        (eachSource) => eachSource.id
+      ),
+      category: "All",
+    }
   );
-  const enabledSourcesInStorage = localStorage.getItem(
-    storageKeys.enabledSourcesStorageKey
-  );
-  const enabledSourcesTheGuardianInStorage = localStorage.getItem(
-    storageKeys.enabledSourcesTheGuardianStorageKey
-  );
-  const enabledSourcesNewYorkTimesInStorage = localStorage.getItem(
-    storageKeys.enabledSourcesNewYorkTimesStorageKey
-  );
-  const enabledCategoryNewsAPIInStorage = localStorage.getItem(
-    storageKeys.enabledCategoryNewsAPIStorageKey
-  );
-  const enabledCategoryTheGuardianInStorage = localStorage.getItem(
-    storageKeys.enabledCategoryTheGuardianStorageKey
-  );
-  const enabledCategoryNewYorkTimesInStorage = localStorage.getItem(
-    storageKeys.enabledCategoryNewYorkTimesStorageKey
-  );
-  const favoriteAuthorsInStorage = localStorage.getItem(
-    storageKeys.favoriteAuthorsStorageKey
-  );
-  const favoriteSourcesInStorage = localStorage.getItem(
-    storageKeys.favoriteSourcesStorageKey
-  );
+  const {
+    favoriteAuthors,
+    favoriteSources,
+    modifyFavoriteSources,
+    modifyFavoriteAuthors,
+  } = useFavorite({
+    favoriteAuthorsStorageKey: storageKeys.favoriteAuthorsStorageKey,
+    favoriteSourcesStorageKey: storageKeys.favoriteSourcesStorageKey,
+  });
 
-  const [queryStatus, setQueryStatus] = useState<QueryStatus>(
-    queryStatusInStorage
-      ? JSON.parse(queryStatusInStorage)
-      : {
-          limit: 10,
-          page: 1,
-          total: 0,
-        }
-  );
-  const [theGuardianQueryStatus, setTheGuardianQueryStatus] =
-    useState<QueryStatus>(
-      theGuardianQueryStatusInStorage
-        ? JSON.parse(theGuardianQueryStatusInStorage)
-        : {
-            limit: 10,
-            page: 1,
-            total: 0,
-          }
-    );
-  const [newYorkTimesQueryStatus, setNewYorkTimesQueryStatus] =
-    useState<QueryStatus>(
-      newYorkTimesQueryStatusInStorage
-        ? JSON.parse(newYorkTimesQueryStatusInStorage)
-        : {
-            limit: 10,
-            page: 1,
-            total: 0,
-          }
-    );
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [searchQueryForKey, setSearchQueryForKey] = useState<string>("");
   const [dateFilters, setDateFilters] = useState<DateFilters>({
     from: null,
     to: null,
   });
-  const [enabledSources, setEnabledSources] = useState<string[]>(
-    enabledSourcesInStorage ? JSON.parse(enabledSourcesInStorage) : []
-  );
-  const [enabledSourcesTheGuardian, setEnabledSourcesTheGuardian] = useState<
-    string[]
-  >(
-    enabledSourcesTheGuardianInStorage
-      ? JSON.parse(enabledSourcesTheGuardianInStorage)
-      : newsSources.TheGuardianAPI.sources.map((eachSource) => eachSource.id)
-  );
-  const [enabledSourcesNewYorkTimes, setEnabledSourcesNewYorkTimes] = useState<
-    string[]
-  >(
-    enabledSourcesNewYorkTimesInStorage
-      ? JSON.parse(enabledSourcesNewYorkTimesInStorage)
-      : newsSources.NewYorkTimesAPI.sources.map((eachSource) => eachSource.id)
-  );
-  const [enabledCategoryNewsAPI, setEnabledCategoryNewsAPI] = useState<string>(
-    enabledCategoryNewsAPIInStorage ? enabledCategoryNewsAPIInStorage : "all"
-  );
-  const [enabledCategoryTheGuardian, setEnabledCategoryTheGuardian] =
-    useState<string>(
-      enabledCategoryTheGuardianInStorage
-        ? enabledCategoryTheGuardianInStorage
-        : "all"
-    );
-  const [enabledCategoryNewYorkTimes, setEnabledCategoryNewYorkTimes] =
-    useState<string>(
-      enabledCategoryNewYorkTimesInStorage
-        ? enabledCategoryNewYorkTimesInStorage
-        : "all"
-    );
-  const [favoriteSources, setFavoriteSources] = useState<Source[]>(
-    favoriteSourcesInStorage ? JSON.parse(favoriteSourcesInStorage) : []
-  );
-  const [favoriteAuthors, setFavoriteAuthors] = useState<string[]>(
-    favoriteAuthorsInStorage ? JSON.parse(favoriteAuthorsInStorage) : []
-  );
 
   const fetchSources = () => {
     const newsSource = newsSources["NewsAPI"];
@@ -154,11 +127,7 @@ function useNews() {
   };
   const fetchNews = () => {
     if (enabledSources.length == 0) {
-      setQueryStatus({
-        ...queryStatus,
-        page: 1,
-        total: 0,
-      });
+      resetQueryStatusNewsAPI();
       return [];
     }
 
@@ -409,183 +378,22 @@ function useNews() {
   });
 
   useEffect(() => {
-    localStorage.setItem(
-      storageKeys.queryStatusStorageKey,
-      JSON.stringify(queryStatus)
-    );
-  }, [queryStatus]);
-  useEffect(() => {
-    if (enabledSources.length > 0) {
-      localStorage.setItem(
-        storageKeys.enabledSourcesStorageKey,
-        JSON.stringify(enabledSources)
-      );
-    } else {
-      localStorage.removeItem(storageKeys.enabledSourcesStorageKey);
-    }
-  }, [enabledSources]);
-  useEffect(() => {
-    localStorage.setItem(
-      storageKeys.enabledCategoryNewsAPIStorageKey,
-      enabledCategoryNewsAPI
-    );
-  }, [enabledCategoryNewsAPI]);
-  useEffect(() => {
-    localStorage.setItem(
-      storageKeys.theGuardianQueryStatusStorageKey,
-      JSON.stringify(theGuardianQueryStatus)
-    );
-  }, [theGuardianQueryStatus]);
-  useEffect(() => {
-    localStorage.setItem(
-      storageKeys.newYorkTimesQueryStatusStorageKey,
-      JSON.stringify(newYorkTimesQueryStatus)
-    );
-  }, [newYorkTimesQueryStatus]);
-  useEffect(() => {
-    localStorage.setItem(
-      storageKeys.enabledCategoryTheGuardianStorageKey,
-      enabledCategoryTheGuardian
-    );
-  }, [enabledCategoryTheGuardian]);
-  useEffect(() => {
-    if (!enabledSourcesTheGuardianInStorage) {
-      const newEnabledSources = newsSources.TheGuardianAPI.sources.map(
-        (fetchedSource) => {
-          return fetchedSource.id;
-        }
-      );
-      if (newEnabledSources && newEnabledSources.length > 0) {
-        localStorage.setItem(
-          storageKeys.enabledSourcesTheGuardianStorageKey,
-          JSON.stringify(newEnabledSources)
-        );
-      }
-    }
-  }, [enabledSourcesTheGuardianInStorage]);
-  useEffect(() => {
-    localStorage.setItem(
-      storageKeys.enabledSourcesTheGuardianStorageKey,
-      JSON.stringify(enabledSourcesTheGuardian)
-    );
-  }, [enabledSourcesTheGuardian]);
-  useEffect(() => {
-    localStorage.setItem(
-      storageKeys.enabledCategoryNewYorkTimesStorageKey,
-      enabledCategoryNewYorkTimes
-    );
-  }, [enabledCategoryNewYorkTimes]);
-  useEffect(() => {
-    if (!enabledSourcesNewYorkTimesInStorage) {
-      const newEnabledSources = newsSources.NewYorkTimesAPI.sources.map(
-        (fetchedSource) => {
-          return fetchedSource.id;
-        }
-      );
-      if (newEnabledSources && newEnabledSources.length > 0) {
-        localStorage.setItem(
-          storageKeys.enabledSourcesNewYorkTimesStorageKey,
-          JSON.stringify(newEnabledSources)
-        );
-      }
-    }
-  }, [enabledSourcesNewYorkTimesInStorage]);
-  useEffect(() => {
-    localStorage.setItem(
-      storageKeys.enabledSourcesNewYorkTimesStorageKey,
-      JSON.stringify(enabledSourcesNewYorkTimes)
-    );
-  }, [enabledSourcesNewYorkTimes]);
-  useEffect(() => {
-    localStorage.setItem(
-      storageKeys.favoriteSourcesStorageKey,
-      JSON.stringify(favoriteSources)
-    );
-  }, [favoriteSources]);
-  useEffect(() => {
-    localStorage.setItem(
-      storageKeys.favoriteAuthorsStorageKey,
-      JSON.stringify(favoriteAuthors)
-    );
-  }, [favoriteAuthors]);
-
-  const modifySource = (sourceID: string) => {
-    let newSources: string[];
-    if (enabledSources.includes(sourceID)) {
-      newSources = enabledSources.filter((val) => val !== sourceID);
-    } else {
-      newSources = [...enabledSources, sourceID];
-    }
-    setEnabledSources(newSources);
     setEnabledCategoryNewsAPI("all");
-    setQueryStatus({
-      ...queryStatus,
-      page: 1,
-      total: 0,
-    });
-  };
+    if (enabledCategoryNewsAPI !== "all") {
+      setEnabledSources([]);
+    }
+  }, [
+    setEnabledCategoryNewsAPI,
+    enabledSources,
+    enabledCategoryNewsAPI,
+    setEnabledSources,
+  ]);
 
   const modifyCategoryNewsAPI = (category: string) => {
     const categoryID = category.toLowerCase();
     setEnabledCategoryNewsAPI(categoryID);
 
-    if (categoryID !== "all") {
-      setEnabledSources([]);
-    }
-
-    setQueryStatus({
-      ...queryStatus,
-      page: 1,
-      total: 0,
-    });
-  };
-  const modifySourceTheGuardian = (sourceID: string) => {
-    let newSources: string[];
-    if (enabledSourcesTheGuardian.includes(sourceID)) {
-      newSources = enabledSourcesTheGuardian.filter((val) => val !== sourceID);
-    } else {
-      newSources = [...enabledSourcesTheGuardian, sourceID];
-    }
-    setEnabledSourcesTheGuardian(newSources);
-    setTheGuardianQueryStatus({
-      ...theGuardianQueryStatus,
-      page: 1,
-      total: 0,
-    });
-  };
-  const modifySourceNewYorkTimes = (sourceID: string) => {
-    let newSources: string[];
-    if (enabledSourcesNewYorkTimes.includes(sourceID)) {
-      newSources = enabledSourcesNewYorkTimes.filter((val) => val !== sourceID);
-    } else {
-      newSources = [...enabledSourcesNewYorkTimes, sourceID];
-    }
-    setEnabledSourcesNewYorkTimes(newSources);
-    setNewYorkTimesQueryStatus({
-      ...newYorkTimesQueryStatus,
-      page: 1,
-      total: 0,
-    });
-  };
-  const modifyCategoryTheGuardian = (category: string) => {
-    const categoryID = category.toLowerCase();
-    setEnabledCategoryTheGuardian(categoryID);
-
-    setTheGuardianQueryStatus({
-      ...theGuardianQueryStatus,
-      page: 1,
-      total: 0,
-    });
-  };
-  const modifyCategoryNewYorkTimes = (category: string) => {
-    const categoryID = category;
-    setEnabledCategoryNewYorkTimes(categoryID);
-
-    setNewYorkTimesQueryStatus({
-      ...newYorkTimesQueryStatus,
-      page: 1,
-      total: 0,
-    });
+    resetQueryStatusNewsAPI();
   };
 
   const searchQueryOnChange = (newText: string) => {
@@ -595,55 +403,19 @@ function useNews() {
   const handleSearchQuerySubmit = (el: KeyboardEvent<HTMLInputElement>) => {
     if (el.key == "Enter") {
       setSearchQueryForKey(searchQuery);
-      setQueryStatus({
-        ...queryStatus,
-        page: 1,
-        total: 0,
-      });
-      setTheGuardianQueryStatus({
-        ...theGuardianQueryStatus,
-        page: 1,
-        total: 0,
-      });
+      resetQueryStatusNewsAPI();
+      resetQueryStatusTheGuardian();
+      resetQueryStatusNewYorkTimes();
     }
   };
 
   const modifyDateFilters = (type: keyof DateFilters, newDate: Date | null) => {
     const newDates: DateFilters = { ...dateFilters };
     newDates[type] = newDate;
-
     setDateFilters(newDates);
-  };
-
-  const modifyFavoriteSources = (sourceInfo: Source) => {
-    let newSources: Source[];
-    if (
-      favoriteSources.find(
-        (favoriteSource) =>
-          favoriteSource.id == sourceInfo.id ||
-          favoriteSource.name == sourceInfo.name
-      )
-    ) {
-      newSources = favoriteSources.filter(
-        (favoriteSource) =>
-          favoriteSource.id !== sourceInfo.id &&
-          favoriteSource.name !== sourceInfo.name
-      );
-    } else {
-      newSources = [...favoriteSources, sourceInfo];
-    }
-    setFavoriteSources(newSources);
-  };
-  const modifyFavoriteAuthors = (author: string) => {
-    let newAuthors: string[];
-    if (favoriteAuthors.includes(author)) {
-      newAuthors = favoriteAuthors.filter(
-        (favoriteAuthor) => favoriteAuthor !== author
-      );
-    } else {
-      newAuthors = [...favoriteAuthors, author];
-    }
-    setFavoriteAuthors(newAuthors);
+    resetQueryStatusNewsAPI();
+    resetQueryStatusTheGuardian();
+    resetQueryStatusNewYorkTimes();
   };
 
   return {
@@ -651,7 +423,6 @@ function useNews() {
     queryStatus,
     sources,
     enabledSources,
-    modifySource,
     searchQuery,
     searchQueryOnChange,
     searchQueryForKey,
@@ -668,17 +439,18 @@ function useNews() {
     theGuardianQueryStatus,
     enabledCategoryTheGuardian,
     modifyCategoryTheGuardian,
-    modifySourceTheGuardian,
     enabledSourcesTheGuardian,
     newYorkTimesNewsQueryResult,
     newYorkTimesQueryStatus,
     enabledCategoryNewYorkTimes,
     modifyCategoryNewYorkTimes,
-    modifySourceNewYorkTimes,
     enabledSourcesNewYorkTimes,
     setQueryStatus,
     setTheGuardianQueryStatus,
     setNewYorkTimesQueryStatus,
+    modifySourceNewsAPI,
+    modifySourceTheGuardian,
+    modifySourceNewYorkTimes,
   };
 }
 

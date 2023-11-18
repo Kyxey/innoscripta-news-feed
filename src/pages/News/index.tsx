@@ -101,7 +101,6 @@ function News() {
     queryStatus,
     sources,
     enabledSources,
-    modifySource,
     searchQuery,
     searchQueryOnChange,
     searchQueryForKey,
@@ -115,7 +114,6 @@ function News() {
     favoriteSources,
     modifyFavoriteSources,
     enabledCategoryTheGuardian,
-    modifySourceTheGuardian,
     enabledSourcesTheGuardian,
     modifyCategoryTheGuardian,
     theGuardianNewsQueryResult,
@@ -124,11 +122,13 @@ function News() {
     newYorkTimesQueryStatus,
     enabledCategoryNewYorkTimes,
     modifyCategoryNewYorkTimes,
-    modifySourceNewYorkTimes,
     enabledSourcesNewYorkTimes,
     setNewYorkTimesQueryStatus,
     setQueryStatus,
     setTheGuardianQueryStatus,
+    modifySourceNewsAPI,
+    modifySourceTheGuardian,
+    modifySourceNewYorkTimes,
   } = useNews();
   const { nextPage, prevPage } = usePagination();
 
@@ -241,10 +241,10 @@ function News() {
                           name={eachSource.id}
                           value={eachSource.id}
                           checked={enabledSources.indexOf(eachSource.id) !== -1}
-                          onChange={() => modifySource(eachSource.id)}
+                          onChange={() => modifySourceNewsAPI(eachSource.id)}
                         />
                         <label
-                          onClick={() => modifySource(eachSource.id)}
+                          onClick={() => modifySourceNewsAPI(eachSource.id)}
                           className="cursor-pointer">
                           {eachSource.name}
                         </label>

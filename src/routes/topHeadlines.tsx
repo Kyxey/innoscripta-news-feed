@@ -156,7 +156,11 @@ function TopHeadlines() {
                           className="mr-1 cursor-pointer"
                           name={eachSource.id}
                           value={eachSource.id}
-                          checked={enabledSources.indexOf(eachSource.id) !== -1}
+                          checked={
+                            enabledSources.indexOf(eachSource.id) !== -1 ||
+                            (enabledSources.length === 1 &&
+                              enabledSources[0] === "all")
+                          }
                           onChange={() => modifySourceNewsAPI(eachSource.id)}
                         />
                         <label
@@ -178,13 +182,20 @@ function TopHeadlines() {
                       <input
                         type="radio"
                         className="mr-1 cursor-pointer"
-                        name={eachCategory}
-                        value={eachCategory}
-                        checked={enabledCategoryNewsAPI === eachCategory}
-                        onChange={() => modifyCategoryNewsAPI(eachCategory)}
+                        name={`NewsAPI-Category-${eachCategory}`}
+                        value={eachCategory.toLowerCase()}
+                        checked={
+                          enabledCategoryNewsAPI.toLowerCase() ===
+                          eachCategory.toLowerCase()
+                        }
+                        onChange={() =>
+                          modifyCategoryNewsAPI(eachCategory.toLowerCase())
+                        }
                       />
                       <label
-                        onClick={() => modifyCategoryNewsAPI(eachCategory)}
+                        onClick={() =>
+                          modifyCategoryNewsAPI(eachCategory.toLowerCase())
+                        }
                         className="cursor-pointer">
                         {eachCategory}
                       </label>
@@ -259,9 +270,12 @@ function TopHeadlines() {
                       <input
                         type="radio"
                         className="mr-1 cursor-pointer"
-                        name={eachCategory}
+                        name={`TheGuardian-Category-${eachCategory}`}
                         value={eachCategory}
-                        checked={enabledCategoryTheGuardian === eachCategory}
+                        checked={
+                          enabledCategoryTheGuardian.toLowerCase() ===
+                          eachCategory.toLowerCase()
+                        }
                         onChange={() => modifyCategoryTheGuardian(eachCategory)}
                       />
                       <label
@@ -348,7 +362,7 @@ function TopHeadlines() {
                       <input
                         type="radio"
                         className="mr-1 cursor-pointer"
-                        name={eachCategory}
+                        name={`NewYorkTimes-Category-${eachCategory}`}
                         value={eachCategory}
                         checked={enabledCategoryNewYorkTimes === eachCategory}
                         onChange={() =>

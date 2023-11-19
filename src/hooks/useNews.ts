@@ -1,4 +1,4 @@
-import { useEffect, useState, type KeyboardEvent } from "react";
+import { useState, type KeyboardEvent } from "react";
 import { useQuery, type UseQueryResult } from "@tanstack/react-query";
 import { newsSources } from "const/news";
 import axios from "axios";
@@ -14,10 +14,9 @@ function useNews() {
     queryStatus,
     setQueryStatus,
     enabledSources,
-    setEnabledSources,
     enabledSourcesInStorage,
     enabledCategory: enabledCategoryNewsAPI,
-    setEnabledCategory: setEnabledCategoryNewsAPI,
+    modifyCategory: modifyCategoryNewsAPI,
     modifySource: modifySourceNewsAPI,
     resetQueryStatus: resetQueryStatusNewsAPI,
   } = useSettings(
@@ -379,25 +378,6 @@ function useNews() {
     queryFn: fetchNewYorkTimesNews,
     staleTime: 60 * 1000,
   });
-
-  useEffect(() => {
-    setEnabledCategoryNewsAPI("all");
-    if (enabledCategoryNewsAPI !== "all") {
-      setEnabledSources([]);
-    }
-  }, [
-    setEnabledCategoryNewsAPI,
-    enabledSources,
-    enabledCategoryNewsAPI,
-    setEnabledSources,
-  ]);
-
-  const modifyCategoryNewsAPI = (category: string) => {
-    const categoryID = category.toLowerCase();
-    setEnabledCategoryNewsAPI(categoryID);
-
-    resetQueryStatusNewsAPI();
-  };
 
   const searchQueryOnChange = (newText: string) => {
     setSearchQuery(newText);

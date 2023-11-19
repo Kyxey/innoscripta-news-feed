@@ -34,7 +34,7 @@ function useSettings(
       : defaults.sources
   );
   const [enabledCategory, setEnabledCategory] = useState(
-    enabledCategoryInStorage ? enabledCategoryInStorage : defaults.category
+    enabledCategoryInStorage || defaults.category
   );
   const resetQueryStatus = () => {
     setQueryStatus((prevQueryStatus) => ({
@@ -93,8 +93,7 @@ function useSettings(
   }, [queryStatus, storageKeys.queryStatusStorageKey]);
 
   const modifyCategory = (category: string) => {
-    const categoryID = category;
-    setEnabledCategory(categoryID);
+    setEnabledCategory(category);
 
     resetQueryStatus();
   };

@@ -1,4 +1,26 @@
 const icons = {
+  Menu: (
+    <svg
+      id="Layer_1"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 64 64"
+      className="fill-current max-w-[48px]">
+      <rect
+        width="64"
+        height="9.18"
+      />
+      <rect
+        y="27.41"
+        width="64"
+        height="9.18"
+      />
+      <rect
+        y="54.82"
+        width="64"
+        height="9.18"
+      />
+    </svg>
+  ),
   Search: (
     <svg
       version="1.1"

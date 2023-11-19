@@ -6,3 +6,17 @@
   width: 100vw;
   height: 100vh;
 }
+
+@media (max-width: 1024px) {
+  .desktop-menu {
+    display: none;
+  }
+
+  .mobile-menu {
+    display: none;
+  }
+
+  .menu-toggle:checked + .mobile-menu {
+    display: block;
+  }
+}

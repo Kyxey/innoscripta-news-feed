@@ -1,25 +1,26 @@
+import type { Dispatch, SetStateAction } from "react";
 import type { QueryStatus } from "types";
 
 type PaginationFnArgs = {
   queryStatus: QueryStatus;
-  setQueryStatus: (queryStatus: QueryStatus) => void;
+  setQueryStatus: Dispatch<SetStateAction<QueryStatus>>;
 };
 
 function usePagination() {
   const nextPage = ({ queryStatus, setQueryStatus }: PaginationFnArgs) => {
     if (queryStatus.limit * queryStatus.page < queryStatus.total) {
-      setQueryStatus({
-        ...queryStatus,
+      setQueryStatus((prevQueryStatus) => ({
+        ...prevQueryStatus,
         page: queryStatus.page + 1,
-      });
+      }));
     }
   };
   const prevPage = ({ queryStatus, setQueryStatus }: PaginationFnArgs) => {
     if (queryStatus.page > 1) {
-      setQueryStatus({
-        ...queryStatus,
+      setQueryStatus((prevQueryStatus) => ({
+        ...prevQueryStatus,
         page: queryStatus.page - 1,
-      });
+      }));
     }
   };
 

@@ -150,10 +150,10 @@ function useNews() {
             NewsAPI: result.data.articles,
           };
 
-          setQueryStatus({
-            ...queryStatus,
+          setQueryStatus((prevQueryStatus) => ({
+            ...prevQueryStatus,
             total: result.data.totalResults,
-          });
+          }));
 
           if (aggregatedResult.NewsAPI && aggregatedResult.NewsAPI.length > 0) {
             const news: News[] = [];
@@ -220,10 +220,10 @@ function useNews() {
             news: result.data.response.results,
           };
 
-          setTheGuardianQueryStatus({
-            ...theGuardianQueryStatus,
+          setTheGuardianQueryStatus((prevTheGuardianQueryStatus) => ({
+            ...prevTheGuardianQueryStatus,
             total: parseInt(result.data.response.total) || 1,
-          });
+          }));
 
           if (aggregatedResult.news && aggregatedResult.news.length > 0) {
             const news: News[] = [];
@@ -292,10 +292,10 @@ function useNews() {
             news: result.data.response.docs,
           };
 
-          setNewYorkTimesQueryStatus({
-            ...newYorkTimesQueryStatus,
+          setNewYorkTimesQueryStatus((prevNewYorkTimesQueryStatus) => ({
+            ...prevNewYorkTimesQueryStatus,
             total: parseInt(result.data.response.meta.hits) || 1,
-          });
+          }));
 
           if (aggregatedResult.news && aggregatedResult.news.length > 0) {
             const news: News[] = [];
@@ -413,9 +413,10 @@ function useNews() {
   };
 
   const modifyDateFilters = (type: keyof DateFilters, newDate?: Date) => {
-    const newDates: DateFilters = { ...dateFilters };
-    newDates[type] = newDate;
-    setDateFilters(newDates);
+    setDateFilters((prevDates) => ({
+      ...prevDates,
+      [type]: newDate,
+    }));
     resetQueryStatusNewsAPI();
     resetQueryStatusTheGuardian();
     resetQueryStatusNewYorkTimes();

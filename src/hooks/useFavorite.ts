@@ -20,34 +20,34 @@ function useFavorite(storageKeys: {
   );
 
   const modifyFavoriteSources = (sourceInfo: Source) => {
-    let newSources: Source[];
-    if (
-      favoriteSources.find(
-        (favoriteSource) =>
-          favoriteSource.id === sourceInfo.id ||
-          favoriteSource.name === sourceInfo.name
-      )
-    ) {
-      newSources = favoriteSources.filter(
-        (favoriteSource) =>
-          favoriteSource.id !== sourceInfo.id &&
-          favoriteSource.name !== sourceInfo.name
-      );
-    } else {
-      newSources = [...favoriteSources, sourceInfo];
-    }
-    setFavoriteSources(newSources);
+    setFavoriteSources((prevFavoriteSources) => {
+      if (
+        prevFavoriteSources.findIndex(
+          (favoriteSource) =>
+            favoriteSource.id === sourceInfo.id ||
+            favoriteSource.name === sourceInfo.name
+        ) !== -1
+      ) {
+        return prevFavoriteSources.filter(
+          (favoriteSource) =>
+            favoriteSource.id !== sourceInfo.id &&
+            favoriteSource.name !== sourceInfo.name
+        );
+      }
+
+      return [...prevFavoriteSources, sourceInfo];
+    });
   };
   const modifyFavoriteAuthors = (author: string) => {
-    let newAuthors: string[];
-    if (favoriteAuthors.includes(author)) {
-      newAuthors = favoriteAuthors.filter(
-        (favoriteAuthor) => favoriteAuthor !== author
-      );
-    } else {
-      newAuthors = [...favoriteAuthors, author];
-    }
-    setFavoriteAuthors(newAuthors);
+    setFavoriteAuthors((prevFavoriteAuthors) => {
+      if (prevFavoriteAuthors.includes(author)) {
+        return favoriteAuthors.filter(
+          (favoriteAuthor) => favoriteAuthor !== author
+        );
+      }
+
+      return [...prevFavoriteAuthors, author];
+    });
   };
 
   useEffect(() => {

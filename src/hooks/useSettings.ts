@@ -37,20 +37,19 @@ function useSettings(
     enabledCategoryInStorage ? enabledCategoryInStorage : defaults.category
   );
   const resetQueryStatus = () => {
-    setQueryStatus({
-      ...queryStatus,
+    setQueryStatus((prevQueryStatus) => ({
+      ...prevQueryStatus,
       page: 1,
       total: 0,
-    });
+    }));
   };
   const modifySource = (sourceID: string) => {
-    let newSources: string[];
-    if (enabledSources.includes(sourceID)) {
-      newSources = enabledSources.filter((val) => val !== sourceID);
-    } else {
-      newSources = [...enabledSources, sourceID];
-    }
-    setEnabledSources(newSources);
+    setEnabledSources((prevEnabledSources) => {
+      if (prevEnabledSources.includes(sourceID)) {
+        return prevEnabledSources.filter((val) => val !== sourceID);
+      }
+      return [...prevEnabledSources, sourceID];
+    });
     resetQueryStatus();
   };
 

@@ -64,13 +64,11 @@ function Settings() {
       <p className="text-left border border-t-0 border-x-0 w-1/2 text-innoscripta text-4xl ml-12 border-b-gray-300">
         <b>Personalize Settings</b>
       </p>
-      <section className="grid grid-cols-1 grids-rows-3 lg:grid-cols-3 min-h-max justify-items-center">
-        <div></div>
-        <div className="flex flex-col space-y-4 mb-4 w-3/4 lg:w-full">
+      <section className="flex justify-center w-full min-h-max justify-items-center">
+        <div className="flex flex-col space-y-4 mb-4 w-3/4 lg:w-1/3">
           {renderFavoriteDetails("Favorite Authors", favoriteAuthors, modifyFn)}
           {renderFavoriteDetails("Favorite Sources", favoriteSources, modifyFn)}
         </div>
-        <div></div>
       </section>
     </div>
   );

@@ -60,7 +60,7 @@ const processResult = (
   if (queryResult.isSuccess) {
     if (queryResult.data && queryResult.data.length > 0) {
       return (
-        <div className="flex flex-col space-y-4 mb-4 px-3 lg:px-0">
+        <div className="flex flex-col space-y-4 mb-4 w-full py-4">
           {searchQuery !== "" && (
             <p className="text-2xl text-black">
               {" "}
@@ -138,10 +138,10 @@ function News() {
       <p className="text-left border border-t-0 border-x-0 w-1/2 text-innoscripta text-4xl ml-12 border-b-gray-300">
         <b>Top Headlines</b>
       </p>
-      <section className="grid grid-cols-1 grids-rows-3 lg:grid-cols-3 min-h-max pt-4">
+      <section className="flex flex-col lg:flex-row w-full min-h-max items-center lg:items-start mx-0 lg:mx-8">
         {/* Search bar and general filters */}
-        <div className="flex justify-center h-fit min-h-max mb-4">
-          <div className="text-left w-3/4 h-1/2 overflow-scroll border border-innoscripta rounded p-4">
+        <div className="relative text-gray-600 w-3/4 lg:w-1/3 h-fit py-0 lg:py-4 px-0 lg:px-4">
+          <div className="text-left overflow-scroll border border-innoscripta rounded p-4">
             <details className="cursor-pointer text-2xl mb-4">
               <summary>Date</summary>
               <div className="cursor-pointer ml-4">
@@ -182,7 +182,7 @@ function News() {
           </div>
         </div>
         {/* Search bar */}
-        <div className="relative text-gray-400 w-3/4 lg:w-full mx-auto h-fit">
+        <div className="relative text-gray-400 w-3/4 lg:w-1/3 h-fit py-4 px-0 lg:px-4">
           <Tooltip
             id="search-bar"
             openEvents={{
@@ -215,16 +215,15 @@ function News() {
             data-tooltip-content="Press enter after typing to search."
           />
         </div>
-        <div></div>
       </section>
 
       {/* News API */}
       <p className="text-left border border-t-0 border-x-0 w-1/2 text-innoscripta text-2xl ml-12 border-b-gray-300">
         <b>{newsSources.NewsAPI.friendlyName}</b>
       </p>
-      <section className="grid grid-cols-1 grids-rows-3 lg:grid-cols-3 min-h-max">
-        <div className="flex justify-center h-fit min-h-max mb-4">
-          <div className="text-left w-3/4 h-1/2 overflow-scroll border border-innoscripta rounded p-4">
+      <section className="flex flex-col lg:flex-row w-full min-h-max items-center lg:items-start mx-0 lg:mx-8">
+        <div className="relative text-gray-600 w-3/4 lg:w-1/3 h-fit py-0 lg:py-4 px-0 lg:px-4">
+          <div className="text-left overflow-scroll border border-innoscripta rounded p-4">
             <details className="cursor-pointer text-2xl">
               <summary>Filters</summary>
               <details className="text-lg ml-2">
@@ -279,33 +278,34 @@ function News() {
             </details>
           </div>
         </div>
-        {processResult(
-          newsQueryResult,
-          queryStatus,
-          () => {
-            nextPage({ queryStatus, setQueryStatus });
-          },
-          () => {
-            prevPage({ queryStatus, setQueryStatus });
-          },
-          searchQueryForKey,
-          {
-            favoriteAuthors: favoriteAuthors,
-            favoriteSources: favoriteSources,
-            favoriteAuthorModifyFn: modifyFavoriteAuthors,
-            favoriteSourceModifyFn: modifyFavoriteSources,
-          }
-        )}
-        <div></div>
+        <div className="flex justify-center min-h-max w-3/4 lg:w-1/3 pt-4 lg:pt-0">
+          {processResult(
+            newsQueryResult,
+            queryStatus,
+            () => {
+              nextPage({ queryStatus, setQueryStatus });
+            },
+            () => {
+              prevPage({ queryStatus, setQueryStatus });
+            },
+            searchQueryForKey,
+            {
+              favoriteAuthors: favoriteAuthors,
+              favoriteSources: favoriteSources,
+              favoriteAuthorModifyFn: modifyFavoriteAuthors,
+              favoriteSourceModifyFn: modifyFavoriteSources,
+            }
+          )}
+        </div>
       </section>
 
       {/* The Guardian */}
       <p className="text-left border border-t-0 border-x-0 w-1/2 text-innoscripta text-2xl ml-12 border-b-gray-300">
         <b>{newsSources.TheGuardianAPI.friendlyName}</b>
       </p>
-      <section className="grid grid-cols-1 grids-rows-3 lg:grid-cols-3 min-h-max">
-        <div className="flex justify-center h-fit min-h-max mb-4">
-          <div className="text-left w-3/4 h-1/2 overflow-scroll border border-innoscripta rounded p-4">
+      <section className="flex flex-col lg:flex-row w-full min-h-max items-center lg:items-start mx-0 lg:mx-8">
+        <div className="relative text-gray-600 w-3/4 lg:w-1/3 h-fit py-0 lg:py-4 px-0 lg:px-4">
+          <div className="text-left overflow-scroll border border-innoscripta rounded p-4">
             <details className="cursor-pointer text-2xl">
               <summary>Filters</summary>
               <details className="text-lg ml-2">
@@ -364,39 +364,40 @@ function News() {
             </details>
           </div>
         </div>
-        {processResult(
-          theGuardianNewsQueryResult,
-          theGuardianQueryStatus,
-          () => {
-            nextPage({
-              queryStatus: theGuardianQueryStatus,
-              setQueryStatus: setTheGuardianQueryStatus,
-            });
-          },
-          () => {
-            prevPage({
-              queryStatus: theGuardianQueryStatus,
-              setQueryStatus: setTheGuardianQueryStatus,
-            });
-          },
-          searchQueryForKey,
-          {
-            favoriteAuthors: favoriteAuthors,
-            favoriteSources: favoriteSources,
-            favoriteAuthorModifyFn: modifyFavoriteAuthors,
-            favoriteSourceModifyFn: modifyFavoriteSources,
-          }
-        )}
-        <div></div>
+        <div className="flex justify-center min-h-max w-3/4 lg:w-1/3 pt-4 lg:pt-0">
+          {processResult(
+            theGuardianNewsQueryResult,
+            theGuardianQueryStatus,
+            () => {
+              nextPage({
+                queryStatus: theGuardianQueryStatus,
+                setQueryStatus: setTheGuardianQueryStatus,
+              });
+            },
+            () => {
+              prevPage({
+                queryStatus: theGuardianQueryStatus,
+                setQueryStatus: setTheGuardianQueryStatus,
+              });
+            },
+            searchQueryForKey,
+            {
+              favoriteAuthors: favoriteAuthors,
+              favoriteSources: favoriteSources,
+              favoriteAuthorModifyFn: modifyFavoriteAuthors,
+              favoriteSourceModifyFn: modifyFavoriteSources,
+            }
+          )}
+        </div>
       </section>
 
       {/* New York Times */}
       <p className="text-left border border-t-0 border-x-0 w-1/2 text-innoscripta text-2xl ml-12 border-b-gray-300">
         <b>{newsSources.NewYorkTimesAPI.friendlyName}</b>
       </p>
-      <section className="grid grid-cols-1 grids-rows-3 lg:grid-cols-3 min-h-max">
-        <div className="flex justify-center h-fit min-h-max mb-4">
-          <div className="text-left w-3/4 h-1/2 overflow-scroll border border-innoscripta rounded p-4">
+      <section className="flex flex-col lg:flex-row w-full min-h-max items-center lg:items-start mx-0 lg:mx-8">
+        <div className="relative text-gray-600 w-3/4 lg:w-1/3 h-fit py-0 lg:py-4 px-0 lg:px-4">
+          <div className="text-left overflow-scroll border border-innoscripta rounded p-4">
             <details className="cursor-pointer text-2xl">
               <summary>Filters</summary>
               <details className="text-lg ml-2">
@@ -459,30 +460,31 @@ function News() {
             </details>
           </div>
         </div>
-        {processResult(
-          newYorkTimesNewsQueryResult,
-          newYorkTimesQueryStatus,
-          () => {
-            nextPage({
-              queryStatus: newYorkTimesQueryStatus,
-              setQueryStatus: setNewYorkTimesQueryStatus,
-            });
-          },
-          () => {
-            prevPage({
-              queryStatus: newYorkTimesQueryStatus,
-              setQueryStatus: setNewYorkTimesQueryStatus,
-            });
-          },
-          searchQueryForKey,
-          {
-            favoriteAuthors: favoriteAuthors,
-            favoriteSources: favoriteSources,
-            favoriteAuthorModifyFn: modifyFavoriteAuthors,
-            favoriteSourceModifyFn: modifyFavoriteSources,
-          }
-        )}
-        <div></div>
+        <div className="flex justify-center min-h-max w-3/4 lg:w-1/3 pt-4 lg:pt-0">
+          {processResult(
+            newYorkTimesNewsQueryResult,
+            newYorkTimesQueryStatus,
+            () => {
+              nextPage({
+                queryStatus: newYorkTimesQueryStatus,
+                setQueryStatus: setNewYorkTimesQueryStatus,
+              });
+            },
+            () => {
+              prevPage({
+                queryStatus: newYorkTimesQueryStatus,
+                setQueryStatus: setNewYorkTimesQueryStatus,
+              });
+            },
+            searchQueryForKey,
+            {
+              favoriteAuthors: favoriteAuthors,
+              favoriteSources: favoriteSources,
+              favoriteAuthorModifyFn: modifyFavoriteAuthors,
+              favoriteSourceModifyFn: modifyFavoriteSources,
+            }
+          )}
+        </div>
       </section>
     </div>
   );

@@ -8,9 +8,9 @@ const classNames = {
 
 function Header() {
   return (
-    <header className="absolute z-10 grid grid-cols-1 lg:grid-cols-3 inset-x-0 top-0 bg-innoscripta">
-      <div>
-        <ul className="flex flex-row justify-around content-center items-center h-full w-full">
+    <header className="absolute flex justify-start items-center z-10 inset-x-0 top-0 bg-innoscripta">
+      <div className="flex flex-row h-full w-1/3">
+        <ul className="w-full flex justify-around">
           <li className={classNames.menuItems}>
             <Link to="/">Top Headlines</Link>
           </li>
@@ -22,7 +22,7 @@ function Header() {
           </li>
         </ul>
       </div>
-      <div className="flex justify-start lg:justify-center">
+      <div className="flex w-1/2 lg:w-1/3 justify-start lg:justify-center">
         <a
           href="#"
           className="inline-block">
@@ -31,7 +31,6 @@ function Header() {
           </div>
         </a>
       </div>
-      <div></div>
     </header>
   );
 }

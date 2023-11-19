@@ -54,7 +54,7 @@ const processResult = (
   if (queryResult.isSuccess) {
     if (queryResult.data && queryResult.data.length > 0) {
       return (
-        <div className="flex flex-col items-center space-y-4 mb-4 px-3 lg:px-0">
+        <div className="space-y-4 mb-4 lg:px-0">
           {searchQuery !== "" && (
             <p className="text-2xl text-black">
               {" "}
@@ -67,7 +67,7 @@ const processResult = (
     }
 
     return (
-      <div className="w-3/4 lg:w-full">
+      <div className="w-full">
         <SearchNotFound />
         <p className="text-lg mt-3 text-center text-gray-500">
           Start liking some news from the{" "}
@@ -125,10 +125,9 @@ function MyFeed() {
       <p className="text-left border border-t-0 border-x-0 w-1/2 text-innoscripta text-4xl ml-12 border-b-gray-300">
         <b>My Feed</b>
       </p>
-      <section className="grid grid-cols-1 grids-rows-3 lg:grid-cols-3 min-h-max pt-4">
-        <div></div>
+      <section className="flex w-full min-h-max pt-4">
         {/* Search bar */}
-        <div className="relative text-gray-400 w-3/4 lg:w-full mx-auto h-fit">
+        <div className="relative text-gray-400 w-3/4 lg:w-1/3 mx-auto h-fit">
           <Tooltip
             id="search-bar"
             openEvents={{
@@ -161,19 +160,14 @@ function MyFeed() {
             data-tooltip-content="Press enter after typing to search."
           />
         </div>
-        <div></div>
       </section>
-      <section className="grid grid-cols-1 grids-rows-3 lg:grid-cols-3 min-h-max justify-items-center">
-        <div className="flex justify-center h-fit min-h-max mb-4">
-          <div></div>
-        </div>
+      <section className="flex justify-center min-h-max w-3/4 lg:w-1/3 mx-auto">
         {processResult(shakeDataFromQuery(combinedQuery), searchQueryForKey, {
           favoriteAuthors: favoriteAuthors,
           favoriteSources: favoriteSources,
           favoriteAuthorModifyFn: modifyFavoriteAuthors,
           favoriteSourceModifyFn: modifyFavoriteSources,
         })}
-        <div></div>
       </section>
     </div>
   );

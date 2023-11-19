@@ -60,8 +60,8 @@ function Cards(props: Props) {
                 isFavoriteSource={
                   favoriteSources.find(
                     (favoriteSource) =>
-                      favoriteSource.id == newsItem.source.id ||
-                      favoriteSource.name == newsItem.source.id
+                      favoriteSource.id === newsItem.source.id ||
+                      favoriteSource.name === newsItem.source.id
                   ) !== undefined
                 }
                 favoriteAuthorModifyFn={modifyFavoriteAuthors}

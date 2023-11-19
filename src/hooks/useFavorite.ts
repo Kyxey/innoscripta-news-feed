@@ -24,8 +24,8 @@ function useFavorite(storageKeys: {
     if (
       favoriteSources.find(
         (favoriteSource) =>
-          favoriteSource.id == sourceInfo.id ||
-          favoriteSource.name == sourceInfo.name
+          favoriteSource.id === sourceInfo.id ||
+          favoriteSource.name === sourceInfo.name
       )
     ) {
       newSources = favoriteSources.filter(

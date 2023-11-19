@@ -172,7 +172,7 @@ function TopHeadlines() {
                         className="mr-1 cursor-pointer"
                         name={eachCategory}
                         value={eachCategory}
-                        checked={enabledCategoryNewsAPI == eachCategory}
+                        checked={enabledCategoryNewsAPI === eachCategory}
                         onChange={() => modifyCategoryNewsAPI(eachCategory)}
                       />
                       <label
@@ -253,7 +253,7 @@ function TopHeadlines() {
                         className="mr-1 cursor-pointer"
                         name={eachCategory}
                         value={eachCategory}
-                        checked={enabledCategoryTheGuardian == eachCategory}
+                        checked={enabledCategoryTheGuardian === eachCategory}
                         onChange={() => modifyCategoryTheGuardian(eachCategory)}
                       />
                       <label
@@ -342,7 +342,7 @@ function TopHeadlines() {
                         className="mr-1 cursor-pointer"
                         name={eachCategory}
                         value={eachCategory}
-                        checked={enabledCategoryNewYorkTimes == eachCategory}
+                        checked={enabledCategoryNewYorkTimes === eachCategory}
                         onChange={() =>
                           modifyCategoryNewYorkTimes(eachCategory)
                         }

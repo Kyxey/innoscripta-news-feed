@@ -92,7 +92,7 @@ function useNews() {
         `${newsSource.url}sources?country=us&language=en&apiKey=${newsSource.apiKey}`
       )
       .then((result) => {
-        if (result.status == 200) {
+        if (result.status === 200) {
           const fetchedSources: Source[] = result.data.sources.map(
             (sourceData: { id: string; name: string }) => {
               return {
@@ -121,7 +121,7 @@ function useNews() {
       });
   };
   const fetchNews = () => {
-    if (enabledSources.length == 0) {
+    if (enabledSources.length === 0) {
       resetQueryStatusNewsAPI();
       return [];
     }
@@ -148,7 +148,7 @@ function useNews() {
         })
       )
       .then((result) => {
-        if (result.status == 200) {
+        if (result.status === 200) {
           const aggregatedResult = {
             NewsAPI: result.data.articles,
           };
@@ -190,7 +190,7 @@ function useNews() {
       });
   };
   const fetchGuardianNews = () => {
-    if (enabledSourcesTheGuardian.length == 0) {
+    if (enabledSourcesTheGuardian.length === 0) {
       resetQueryStatusTheGuardian();
       return [];
     }
@@ -218,7 +218,7 @@ function useNews() {
         })
       )
       .then((result) => {
-        if (result.status == 200) {
+        if (result.status === 200) {
           const aggregatedResult = {
             news: result.data.response.results,
           };
@@ -263,7 +263,7 @@ function useNews() {
       });
   };
   const fetchNewYorkTimesNews = () => {
-    if (enabledSourcesNewYorkTimes.length == 0) {
+    if (enabledSourcesNewYorkTimes.length === 0) {
       resetQueryStatusNewYorkTimes();
       return [];
     }
@@ -290,7 +290,7 @@ function useNews() {
         })
       )
       .then((result) => {
-        if (result.status == 200) {
+        if (result.status === 200) {
           const aggregatedResult = {
             news: result.data.response.docs,
           };
@@ -407,7 +407,7 @@ function useNews() {
   };
 
   const handleSearchQuerySubmit = (el: KeyboardEvent<HTMLInputElement>) => {
-    if (el.key == "Enter") {
+    if (el.key === "Enter") {
       setSearchQueryForKey(searchQuery);
       resetQueryStatusNewsAPI();
       resetQueryStatusTheGuardian();

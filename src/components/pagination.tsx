@@ -24,9 +24,9 @@ function Pagination({
         className={
           classNames.buttonGeneral +
           " " +
-          classNames[currentPage == 1 ? "buttonDisabled" : "buttonEnabled"]
+          classNames[currentPage === 1 ? "buttonDisabled" : "buttonEnabled"]
         }
-        disabled={currentPage == 1}
+        disabled={currentPage === 1}
         onClick={prevPageFn}>
         Prev
       </button>
@@ -38,10 +38,10 @@ function Pagination({
           classNames.buttonGeneral +
           " " +
           classNames[
-            currentPage == totalPages ? "buttonDisabled" : "buttonEnabled"
+            currentPage === totalPages ? "buttonDisabled" : "buttonEnabled"
           ]
         }
-        disabled={currentPage == totalPages}
+        disabled={currentPage === totalPages}
         onClick={nextPageFn}>
         Next
       </button>

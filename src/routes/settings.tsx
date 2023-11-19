@@ -1,6 +1,7 @@
 import Header from "components/header";
 import { storageKeys } from "const/storage";
 import { useFavorite } from "hooks/useFavorite";
+import { Helmet } from "react-helmet";
 
 type ModifyFn = (item: string | { id: string; name: string }) => void;
 
@@ -60,6 +61,9 @@ function Settings() {
 
   return (
     <div className="w-full h-full space-y-9 pt-28">
+      <Helmet>
+        <title>Innoscripta News Feed | Personalize Settings</title>
+      </Helmet>
       <Header />
       <p className="text-left border border-t-0 border-x-0 w-1/2 text-innoscripta text-4xl ml-12 border-b-gray-300">
         <b>Personalize Settings</b>

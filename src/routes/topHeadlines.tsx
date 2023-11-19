@@ -7,6 +7,7 @@ import { Tooltip } from "react-tooltip";
 import DatePicker from "react-datepicker";
 import { newsSources } from "const/news";
 import "react-datepicker/dist/react-datepicker.css";
+import { Helmet } from "react-helmet";
 
 function TopHeadlines() {
   const {
@@ -43,6 +44,9 @@ function TopHeadlines() {
 
   return (
     <div className="w-full h-full space-y-9 pt-28">
+      <Helmet>
+        <title>Innoscripta News Feed | Top Headlines</title>
+      </Helmet>
       <Header />
       <p className="text-left border border-t-0 border-x-0 w-1/2 text-innoscripta text-4xl ml-12 border-b-gray-300">
         <b>Top Headlines</b>

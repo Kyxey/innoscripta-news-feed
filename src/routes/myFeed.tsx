@@ -4,6 +4,7 @@ import Icon from "components/icon";
 import { Tooltip } from "react-tooltip";
 import "react-datepicker/dist/react-datepicker.css";
 import Cards from "components/cards";
+import { Helmet } from "react-helmet";
 
 function MyFeed() {
   const {
@@ -26,6 +27,9 @@ function MyFeed() {
 
   return (
     <div className="w-full h-full space-y-9 pt-28">
+      <Helmet>
+        <title>Innoscripta News Feed | My Feed</title>
+      </Helmet>
       <Header />
       <p className="text-left border border-t-0 border-x-0 w-1/2 text-innoscripta text-4xl ml-12 border-b-gray-300">
         <b>My Feed</b>

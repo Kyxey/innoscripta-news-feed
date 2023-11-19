@@ -42,6 +42,22 @@ function TopHeadlines() {
   } = useNews();
   const { nextPage, prevPage } = usePagination();
 
+  const modifySourceNewsAPIFn = (sourceID: string) => {
+    modifySourceNewsAPI(sourceID);
+
+    // Because the NewsAPI doesn't support both filters
+    modifyCategoryNewsAPI("all");
+  };
+  const modifyCategoryNewsAPIFn = (category: string) => {
+    modifyCategoryNewsAPI(category.toLowerCase());
+
+    // Because the NewsAPI doesn't support both filters
+    sources.data?.forEach((eachSource) => {
+      !enabledSources.includes(eachSource.id) &&
+        modifySourceNewsAPI(eachSource.id);
+    });
+  };
+
   return (
     <div className="w-full h-full space-y-9 pt-28">
       <Helmet>
@@ -165,10 +181,10 @@ function TopHeadlines() {
                             (enabledSources.length === 1 &&
                               enabledSources[0] === "all")
                           }
-                          onChange={() => modifySourceNewsAPI(eachSource.id)}
+                          onChange={() => modifySourceNewsAPIFn(eachSource.id)}
                         />
                         <label
-                          onClick={() => modifySourceNewsAPI(eachSource.id)}
+                          onClick={() => modifySourceNewsAPIFn(eachSource.id)}
                           className="cursor-pointer">
                           {eachSource.name}
                         </label>
@@ -192,14 +208,10 @@ function TopHeadlines() {
                           enabledCategoryNewsAPI.toLowerCase() ===
                           eachCategory.toLowerCase()
                         }
-                        onChange={() =>
-                          modifyCategoryNewsAPI(eachCategory.toLowerCase())
-                        }
+                        onChange={() => modifyCategoryNewsAPIFn(eachCategory)}
                       />
                       <label
-                        onClick={() =>
-                          modifyCategoryNewsAPI(eachCategory.toLowerCase())
-                        }
+                        onClick={() => modifyCategoryNewsAPIFn(eachCategory)}
                         className="cursor-pointer">
                         {eachCategory}
                       </label>

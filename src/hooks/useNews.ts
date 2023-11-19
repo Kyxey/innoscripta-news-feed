@@ -27,6 +27,7 @@ function useNews() {
     setQueryStatus,
     enabledSources,
     enabledSourcesInStorage,
+    setEnabledSources,
     enabledCategory: enabledCategoryNewsAPI,
     modifyCategory: modifyCategoryNewsAPI,
     modifySource: modifySourceNewsAPI,
@@ -115,6 +116,7 @@ function useNews() {
               return fetchedSource.id;
             });
             if (newEnabledSources && newEnabledSources.length > 0) {
+              setEnabledSources(newEnabledSources);
               localStorage.setItem(
                 storageKeys.enabledSourcesStorageKey,
                 JSON.stringify(newEnabledSources)

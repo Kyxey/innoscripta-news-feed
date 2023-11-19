@@ -146,11 +146,7 @@ function TopHeadlines() {
                           className="mr-1 cursor-pointer"
                           name={eachSource.id}
                           value={eachSource.id}
-                          checked={
-                            enabledSources.indexOf(eachSource.id) !== -1 ||
-                            (enabledSources.length === 1 &&
-                              enabledSources[0] === "all")
-                          }
+                          checked={enabledSources.indexOf(eachSource.id) !== -1}
                           onChange={() => modifySourceNewsAPIFn(eachSource.id)}
                         />
                         <label

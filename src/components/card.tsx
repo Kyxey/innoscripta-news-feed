@@ -1,5 +1,5 @@
 import Icon from "components/icon";
-import { Tooltip } from "react-tooltip";
+import Tooltip from "components/tooltip";
 
 type Source = {
   id: string;
@@ -80,23 +80,7 @@ function Card({
         <div
           className="cursor-pointer h-6"
           onClick={() => favoriteSourceModifyFn(source)}>
-          <Tooltip
-            id="favorite-source"
-            openEvents={{
-              mouseenter: true,
-              focus: true,
-              click: true,
-              dblclick: true,
-              mousedown: true,
-            }}
-            closeEvents={{
-              blur: true,
-              click: false,
-              dblclick: false,
-              mouseleave: true,
-              mouseup: false,
-            }}
-          />
+          <Tooltip id="favorite-source" />
           <div
             className={
               "w-5 h-full " +
@@ -113,23 +97,7 @@ function Card({
           <div
             className="cursor-pointer h-6"
             onClick={() => favoriteAuthorModifyFn(author)}>
-            <Tooltip
-              id="favorite-author"
-              openEvents={{
-                mouseenter: true,
-                focus: true,
-                click: true,
-                dblclick: true,
-                mousedown: true,
-              }}
-              closeEvents={{
-                blur: true,
-                click: false,
-                dblclick: false,
-                mouseleave: true,
-                mouseup: false,
-              }}
-            />
+            <Tooltip id="favorite-author" />
             <div
               className={
                 "w-5 h-full " +

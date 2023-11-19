@@ -1,6 +1,6 @@
 import type { KeyboardEventHandler } from "react";
 import Icon from "components/icon";
-import { Tooltip } from "react-tooltip";
+import Tooltip from "components/tooltip";
 
 type Props = {
   searchQuery: string;
@@ -15,23 +15,7 @@ function Search({
 }: Props) {
   return (
     <div className="relative text-gray-400 w-3/4 lg:w-1/3 h-fit py-4">
-      <Tooltip
-        id="search-bar"
-        openEvents={{
-          mouseenter: true,
-          focus: true,
-          click: true,
-          dblclick: true,
-          mousedown: true,
-        }}
-        closeEvents={{
-          blur: true,
-          click: false,
-          dblclick: false,
-          mouseleave: false,
-          mouseup: false,
-        }}
-      />
+      <Tooltip id="search-bar" />
       <div className="absolute ml-2 h-full w-7 flex justify-center top-0">
         <Icon type="Search" />
       </div>

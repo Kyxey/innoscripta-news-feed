@@ -1,5 +1,9 @@
 import { useState, useEffect } from "react";
-import type { Source } from "types";
+
+type Source = {
+  id: string;
+  name: string;
+};
 
 function useFavorite(storageKeys: {
   favoriteAuthorsStorageKey: string;
@@ -71,4 +75,4 @@ function useFavorite(storageKeys: {
   };
 }
 
-export { useFavorite };
+export { useFavorite, type Source };

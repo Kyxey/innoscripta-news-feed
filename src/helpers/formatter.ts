@@ -1,5 +1,5 @@
 import type { NewsSources } from "const/news";
-import type { DateFilters } from "types";
+import type { DateFilters } from "hooks/useNews";
 
 type Config = {
   baseURL: string;

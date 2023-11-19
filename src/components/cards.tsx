@@ -1,4 +1,3 @@
-import type { News, QueryStatus } from "types";
 import type { UseQueryResult } from "@tanstack/react-query";
 import Card from "components/card";
 import { useFavorite } from "hooks/useFavorite";
@@ -7,6 +6,8 @@ import SearchNotFound from "components/searchNotFound";
 import Error from "components/error";
 import Loading from "components/loading";
 import { storageKeys } from "const/storage";
+import type { News } from "hooks/useNews";
+import type { QueryStatus } from "hooks/useSettings";
 
 type PropsWithPagination = {
   queryResult: UseQueryResult<News[]>;

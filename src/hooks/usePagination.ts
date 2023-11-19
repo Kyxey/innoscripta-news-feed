@@ -1,5 +1,5 @@
 import type { Dispatch, SetStateAction } from "react";
-import type { QueryStatus } from "types";
+import type { QueryStatus } from "hooks/useSettings";
 
 type PaginationFnArgs = {
   queryStatus: QueryStatus;

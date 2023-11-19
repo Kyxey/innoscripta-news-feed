@@ -6,8 +6,20 @@ import defaultImg from "assets/default-img.png";
 import { urlFormatter } from "helpers/formatter";
 import { storageKeys } from "const/storage";
 import { useSettings } from "hooks/useSettings";
-import { useFavorite } from "hooks/useFavorite";
-import type { DateFilters, News, Source } from "types";
+import { useFavorite, type Source } from "hooks/useFavorite";
+
+type News = {
+  title: string;
+  createdAt: Date;
+  author: string;
+  source: Source;
+  url: string;
+  image: string;
+};
+type DateFilters = {
+  from?: Date;
+  to?: Date;
+};
 
 function useNews() {
   const {
@@ -480,4 +492,4 @@ function useNews() {
   };
 }
 
-export { useNews };
+export { useNews, type News, type DateFilters };

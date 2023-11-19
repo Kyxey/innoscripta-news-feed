@@ -1,5 +1,10 @@
 import { useState, useEffect } from "react";
-import type { QueryStatus } from "types";
+
+type QueryStatus = {
+  total: number;
+  page: number;
+  limit: number;
+};
 
 function useSettings(
   storageKeys: {
@@ -112,4 +117,4 @@ function useSettings(
   };
 }
 
-export { useSettings };
+export { useSettings, type QueryStatus };

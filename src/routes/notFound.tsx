@@ -1,6 +1,6 @@
 import Header from "components/header";
 import NotFound from "components/notFound";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 
 function NotFoundPage() {
   return (

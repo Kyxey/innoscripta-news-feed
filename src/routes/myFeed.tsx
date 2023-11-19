@@ -4,7 +4,7 @@ import Icon from "components/icon";
 import { Tooltip } from "react-tooltip";
 import "react-datepicker/dist/react-datepicker.css";
 import Cards from "components/cards";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 
 function MyFeed() {
   const {

@@ -7,7 +7,7 @@ import { Tooltip } from "react-tooltip";
 import DatePicker from "react-datepicker";
 import { newsSources } from "const/news";
 import "react-datepicker/dist/react-datepicker.css";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 
 function TopHeadlines() {
   const {

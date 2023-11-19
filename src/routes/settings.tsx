@@ -1,7 +1,7 @@
 import Header from "components/header";
 import { storageKeys } from "const/storage";
 import { useFavorite } from "hooks/useFavorite";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 
 type ModifyFn = (item: string | { id: string; name: string }) => void;
 

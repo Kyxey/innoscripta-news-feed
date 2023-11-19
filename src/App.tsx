@@ -4,13 +4,14 @@ import TopHeadlines from "routes/topHeadlines";
 import MyFeed from "routes/myFeed";
 import Settings from "routes/settings";
 import NotFound from "routes/notFound";
+import { HelmetProvider } from "react-helmet-async";
 import "App.css";
 
 const queryClient = new QueryClient();
 
 function App() {
   return (
-    <>
+    <HelmetProvider>
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
           <Routes>
@@ -33,7 +34,7 @@ function App() {
           </Routes>
         </BrowserRouter>
       </QueryClientProvider>
-    </>
+    </HelmetProvider>
   );
 }
 

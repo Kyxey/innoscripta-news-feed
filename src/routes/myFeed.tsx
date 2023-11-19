@@ -1,6 +1,6 @@
-import Header from "components/Header";
+import Header from "components/header";
 import { useNews } from "hooks/useNews";
-import Icon from "components/Icon";
+import Icon from "components/icon";
 import { Tooltip } from "react-tooltip";
 import "react-datepicker/dist/react-datepicker.css";
 import Cards from "components/cards";

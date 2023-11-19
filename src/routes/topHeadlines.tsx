@@ -1,15 +1,14 @@
-import Header from "components/Header";
+import Header from "components/header";
 import { useNews } from "hooks/useNews";
 import { usePagination } from "hooks/usePagination";
-import type { News } from "types";
 import Cards from "components/cards";
-import Icon from "components/Icon";
+import Icon from "components/icon";
 import { Tooltip } from "react-tooltip";
 import DatePicker from "react-datepicker";
 import { newsSources } from "const/news";
 import "react-datepicker/dist/react-datepicker.css";
 
-function News() {
+function TopHeadlines() {
   const {
     newsQueryResult,
     queryStatus,
@@ -127,7 +126,7 @@ function News() {
         </div>
       </section>
 
-      {/* News API */}
+      {/* NewsAPI */}
       <p className="text-left border border-t-0 border-x-0 w-1/2 text-innoscripta text-2xl ml-12 border-b-gray-300">
         <b>{newsSources.NewsAPI.friendlyName}</b>
       </p>
@@ -385,4 +384,4 @@ function News() {
   );
 }
 
-export default News;
+export default TopHeadlines;

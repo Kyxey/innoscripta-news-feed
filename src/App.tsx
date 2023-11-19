@@ -1,9 +1,9 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import News from "pages/News";
-import MyFeed from "pages/MyFeed";
-import Settings from "pages/Settings";
-import NotFound from "pages/NotFound";
+import TopHeadlines from "routes/topHeadlines";
+import MyFeed from "routes/myFeed";
+import Settings from "routes/settings";
+import NotFound from "routes/notFound";
 import "App.css";
 
 const queryClient = new QueryClient();
@@ -16,7 +16,7 @@ function App() {
           <Routes>
             <Route
               path="/"
-              Component={News}
+              Component={TopHeadlines}
             />
             <Route
               path="/settings"

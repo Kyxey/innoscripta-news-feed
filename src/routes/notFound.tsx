@@ -1,5 +1,5 @@
-import Header from "components/Header";
-import NotFound from "components/NotFound";
+import Header from "components/header";
+import NotFound from "components/notFound";
 
 function NotFoundPage() {
   return (

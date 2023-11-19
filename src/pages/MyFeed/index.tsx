@@ -1,100 +1,9 @@
 import Header from "components/Header";
 import { useNews } from "hooks/useNews";
-import type { UseQueryResult } from "@tanstack/react-query";
-import type { News, Source } from "types";
-import Card from "components/Card";
-import Error from "components/Error";
-import Loading from "components/Loading";
-import SearchNotFound from "components/SearchNotFound";
 import Icon from "components/Icon";
 import { Tooltip } from "react-tooltip";
 import "react-datepicker/dist/react-datepicker.css";
-import { Link } from "react-router-dom";
-
-type FavoriteAttrs = {
-  favoriteAuthors: string[];
-  favoriteSources: Source[];
-  favoriteAuthorModifyFn: (favoriteAuthor: string) => void;
-  favoriteSourceModifyFn: (favoriteSource: Source) => void;
-};
-
-const renderCards = (news: News[], favoriteAttrs: FavoriteAttrs) => {
-  return news.map((newsItem) => {
-    return (
-      <Card
-        imageLink={newsItem.image}
-        title={newsItem.title}
-        url={newsItem.url}
-        author={newsItem.author}
-        date={new Date(newsItem.createdAt)}
-        source={newsItem.source}
-        key={"My-Feed-" + newsItem.title}
-        isFavoriteAuthor={favoriteAttrs.favoriteAuthors.includes(
-          newsItem.author
-        )}
-        isFavoriteSource={
-          favoriteAttrs.favoriteSources.find(
-            (favoriteSource) =>
-              favoriteSource.id == newsItem.source.id ||
-              favoriteSource.name == newsItem.source.id
-          ) !== undefined
-        }
-        favoriteAuthorModifyFn={favoriteAttrs.favoriteAuthorModifyFn}
-        favoriteSourceModifyFn={favoriteAttrs.favoriteSourceModifyFn}
-      />
-    );
-  });
-};
-
-const processResult = (
-  queryResult: UseQueryResult<News[]>,
-  searchQuery: string,
-  favoriteAttrs: FavoriteAttrs
-) => {
-  if (queryResult.isSuccess) {
-    if (queryResult.data && queryResult.data.length > 0) {
-      return (
-        <div className="space-y-4 mb-4 lg:px-0">
-          {searchQuery !== "" && (
-            <p className="text-2xl text-black">
-              {" "}
-              Search results for: <i>"{searchQuery}</i>"
-            </p>
-          )}
-          {renderCards(queryResult.data, favoriteAttrs)}
-        </div>
-      );
-    }
-
-    return (
-      <div className="w-full">
-        <SearchNotFound />
-        <p className="text-lg mt-3 text-center text-gray-500">
-          Start liking some news from the{" "}
-          <Link
-            className="text-innoscripta underline"
-            to="/">
-            <b>Top Headlines</b>
-          </Link>{" "}
-          page to continue.
-        </p>
-      </div>
-    );
-  } else if (
-    queryResult.isError ||
-    queryResult.isLoadingError ||
-    queryResult.isRefetchError
-  ) {
-    return <Error />;
-  } else if (
-    queryResult.isRefetching ||
-    queryResult.isLoading ||
-    queryResult.isFetching ||
-    queryResult.isPending
-  ) {
-    return <Loading />;
-  }
-};
+import Cards from "components/cards";
 
 function MyFeed() {
   const {
@@ -103,10 +12,6 @@ function MyFeed() {
     searchQueryOnChange,
     searchQueryForKey,
     handleSearchQuerySubmit,
-    favoriteAuthors,
-    modifyFavoriteAuthors,
-    favoriteSources,
-    modifyFavoriteSources,
     theGuardianNewsQueryResult,
     newYorkTimesNewsQueryResult,
     combineQueries,
@@ -162,12 +67,11 @@ function MyFeed() {
         </div>
       </section>
       <section className="flex justify-center min-h-max w-3/4 lg:w-1/3 mx-auto">
-        {processResult(shakeDataFromQuery(combinedQuery), searchQueryForKey, {
-          favoriteAuthors: favoriteAuthors,
-          favoriteSources: favoriteSources,
-          favoriteAuthorModifyFn: modifyFavoriteAuthors,
-          favoriteSourceModifyFn: modifyFavoriteSources,
-        })}
+        <Cards
+          queryResult={shakeDataFromQuery(combinedQuery)}
+          searchQuery={searchQueryForKey}
+          isPaginated={false}
+        />
       </section>
     </div>
   );

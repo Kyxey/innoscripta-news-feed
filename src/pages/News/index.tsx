@@ -1,99 +1,13 @@
 import Header from "components/Header";
 import { useNews } from "hooks/useNews";
 import { usePagination } from "hooks/usePagination";
-import type { UseQueryResult } from "@tanstack/react-query";
-import type { News, QueryStatus, Source } from "types";
-import Card from "components/Card";
-import Error from "components/Error";
-import Loading from "components/Loading";
-import SearchNotFound from "components/SearchNotFound";
-import Pagination from "components/Pagination";
+import type { News } from "types";
+import Cards from "components/cards";
 import Icon from "components/Icon";
 import { Tooltip } from "react-tooltip";
 import DatePicker from "react-datepicker";
 import { newsSources } from "const/news";
 import "react-datepicker/dist/react-datepicker.css";
-
-type FavoriteAttrs = {
-  favoriteAuthors: string[];
-  favoriteSources: Source[];
-  favoriteAuthorModifyFn: (favoriteAuthor: string) => void;
-  favoriteSourceModifyFn: (favoriteSource: Source) => void;
-};
-
-const renderCards = (news: News[], favoriteAttrs: FavoriteAttrs) => {
-  return news.map((newsItem) => {
-    return (
-      <Card
-        imageLink={newsItem.image}
-        title={newsItem.title}
-        url={newsItem.url}
-        author={newsItem.author}
-        date={new Date(newsItem.createdAt)}
-        source={newsItem.source}
-        key={newsItem.title}
-        isFavoriteAuthor={favoriteAttrs.favoriteAuthors.includes(
-          newsItem.author
-        )}
-        isFavoriteSource={
-          favoriteAttrs.favoriteSources.find(
-            (favoriteSource) =>
-              favoriteSource.id == newsItem.source.id ||
-              favoriteSource.name == newsItem.source.id
-          ) !== undefined
-        }
-        favoriteAuthorModifyFn={favoriteAttrs.favoriteAuthorModifyFn}
-        favoriteSourceModifyFn={favoriteAttrs.favoriteSourceModifyFn}
-      />
-    );
-  });
-};
-
-const processResult = (
-  queryResult: UseQueryResult<News[]>,
-  queryStatus: QueryStatus,
-  nextPage: () => void,
-  prevPage: () => void,
-  searchQuery: string,
-  favoriteAttrs: FavoriteAttrs
-) => {
-  if (queryResult.isSuccess) {
-    if (queryResult.data && queryResult.data.length > 0) {
-      return (
-        <div className="flex flex-col space-y-4 mb-4 w-full py-4">
-          {searchQuery !== "" && (
-            <p className="text-2xl text-black">
-              {" "}
-              Search results for: <i>"{searchQuery}</i>"
-            </p>
-          )}
-          {renderCards(queryResult.data, favoriteAttrs)}
-          <Pagination
-            currentPage={queryStatus.page}
-            totalPages={Math.ceil(queryStatus.total / queryStatus.limit)}
-            nextPageFn={nextPage}
-            prevPageFn={prevPage}
-          />
-        </div>
-      );
-    }
-
-    return <SearchNotFound />;
-  } else if (
-    queryResult.isError ||
-    queryResult.isLoadingError ||
-    queryResult.isRefetchError
-  ) {
-    return <Error />;
-  } else if (
-    queryResult.isRefetching ||
-    queryResult.isLoading ||
-    queryResult.isFetching ||
-    queryResult.isPending
-  ) {
-    return <Loading />;
-  }
-};
 
 function News() {
   const {
@@ -109,10 +23,6 @@ function News() {
     modifyDateFilters,
     enabledCategoryNewsAPI,
     modifyCategoryNewsAPI,
-    favoriteAuthors,
-    modifyFavoriteAuthors,
-    favoriteSources,
-    modifyFavoriteSources,
     enabledCategoryTheGuardian,
     enabledSourcesTheGuardian,
     modifyCategoryTheGuardian,
@@ -279,23 +189,18 @@ function News() {
           </div>
         </div>
         <div className="flex justify-center min-h-max w-3/4 lg:w-1/3 pt-4 lg:pt-0">
-          {processResult(
-            newsQueryResult,
-            queryStatus,
-            () => {
+          <Cards
+            queryResult={newsQueryResult}
+            searchQuery={searchQueryForKey}
+            isPaginated={true}
+            nextPage={() => {
               nextPage({ queryStatus, setQueryStatus });
-            },
-            () => {
+            }}
+            prevPage={() => {
               prevPage({ queryStatus, setQueryStatus });
-            },
-            searchQueryForKey,
-            {
-              favoriteAuthors: favoriteAuthors,
-              favoriteSources: favoriteSources,
-              favoriteAuthorModifyFn: modifyFavoriteAuthors,
-              favoriteSourceModifyFn: modifyFavoriteSources,
-            }
-          )}
+            }}
+            queryStatus={queryStatus}
+          />
         </div>
       </section>
 
@@ -365,29 +270,24 @@ function News() {
           </div>
         </div>
         <div className="flex justify-center min-h-max w-3/4 lg:w-1/3 pt-4 lg:pt-0">
-          {processResult(
-            theGuardianNewsQueryResult,
-            theGuardianQueryStatus,
-            () => {
+          <Cards
+            queryResult={theGuardianNewsQueryResult}
+            searchQuery={searchQueryForKey}
+            isPaginated={true}
+            nextPage={() => {
               nextPage({
                 queryStatus: theGuardianQueryStatus,
                 setQueryStatus: setTheGuardianQueryStatus,
               });
-            },
-            () => {
+            }}
+            prevPage={() => {
               prevPage({
                 queryStatus: theGuardianQueryStatus,
                 setQueryStatus: setTheGuardianQueryStatus,
               });
-            },
-            searchQueryForKey,
-            {
-              favoriteAuthors: favoriteAuthors,
-              favoriteSources: favoriteSources,
-              favoriteAuthorModifyFn: modifyFavoriteAuthors,
-              favoriteSourceModifyFn: modifyFavoriteSources,
-            }
-          )}
+            }}
+            queryStatus={theGuardianQueryStatus}
+          />
         </div>
       </section>
 
@@ -461,29 +361,24 @@ function News() {
           </div>
         </div>
         <div className="flex justify-center min-h-max w-3/4 lg:w-1/3 pt-4 lg:pt-0">
-          {processResult(
-            newYorkTimesNewsQueryResult,
-            newYorkTimesQueryStatus,
-            () => {
+          <Cards
+            queryResult={newYorkTimesNewsQueryResult}
+            searchQuery={searchQueryForKey}
+            isPaginated={true}
+            nextPage={() => {
               nextPage({
                 queryStatus: newYorkTimesQueryStatus,
                 setQueryStatus: setNewYorkTimesQueryStatus,
               });
-            },
-            () => {
+            }}
+            prevPage={() => {
               prevPage({
                 queryStatus: newYorkTimesQueryStatus,
                 setQueryStatus: setNewYorkTimesQueryStatus,
               });
-            },
-            searchQueryForKey,
-            {
-              favoriteAuthors: favoriteAuthors,
-              favoriteSources: favoriteSources,
-              favoriteAuthorModifyFn: modifyFavoriteAuthors,
-              favoriteSourceModifyFn: modifyFavoriteSources,
-            }
-          )}
+            }}
+            queryStatus={newYorkTimesQueryStatus}
+          />
         </div>
       </section>
     </div>

@@ -73,12 +73,7 @@ function useNews() {
       category: "All",
     }
   );
-  const {
-    favoriteAuthors,
-    favoriteSources,
-    modifyFavoriteSources,
-    modifyFavoriteAuthors,
-  } = useFavorite({
+  const { favoriteAuthors, favoriteSources } = useFavorite({
     favoriteAuthorsStorageKey: storageKeys.favoriteAuthorsStorageKey,
     favoriteSourcesStorageKey: storageKeys.favoriteSourcesStorageKey,
   });
@@ -493,10 +488,6 @@ function useNews() {
     modifyDateFilters,
     enabledCategoryNewsAPI,
     modifyCategoryNewsAPI,
-    favoriteAuthors,
-    modifyFavoriteAuthors,
-    favoriteSources,
-    modifyFavoriteSources,
     theGuardianNewsQueryResult,
     theGuardianQueryStatus,
     enabledCategoryTheGuardian,

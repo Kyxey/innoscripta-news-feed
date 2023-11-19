@@ -33,7 +33,7 @@ function useSettings(
       ? JSON.parse(enabledSourcesInStorage)
       : defaults.sources
   );
-  const [enabledCategory, setEnabledCategory] = useState<string>(
+  const [enabledCategory, setEnabledCategory] = useState(
     enabledCategoryInStorage ? enabledCategoryInStorage : defaults.category
   );
   const resetQueryStatus = () => {

@@ -78,8 +78,8 @@ function useNews() {
     favoriteSourcesStorageKey: storageKeys.favoriteSourcesStorageKey,
   });
 
-  const [searchQuery, setSearchQuery] = useState<string>("");
-  const [searchQueryForKey, setSearchQueryForKey] = useState<string>("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQueryForKey, setSearchQueryForKey] = useState("");
   const [dateFilters, setDateFilters] = useState<DateFilters>();
 
   const fetchSources = () => {

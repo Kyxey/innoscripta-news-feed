@@ -155,8 +155,7 @@ function useNews() {
           }));
 
           if (aggregatedResult.NewsAPI && aggregatedResult.NewsAPI.length > 0) {
-            const news: News[] = [];
-            aggregatedResult.NewsAPI.forEach(
+            return aggregatedResult.NewsAPI.map(
               (newsAPIResult: {
                 title: string;
                 publishedAt: string | number | Date;
@@ -165,7 +164,7 @@ function useNews() {
                 url: string;
                 urlToImage: string;
               }) => {
-                news.push({
+                return {
                   title: newsAPIResult.title,
                   createdAt: new Date(newsAPIResult.publishedAt),
                   author: newsAPIResult.author || "",
@@ -175,10 +174,9 @@ function useNews() {
                   },
                   url: newsAPIResult.url || "",
                   image: newsAPIResult.urlToImage || defaultImg,
-                });
+                };
               }
             );
-            return news;
           }
         }
 
@@ -225,8 +223,7 @@ function useNews() {
           }));
 
           if (aggregatedResult.news && aggregatedResult.news.length > 0) {
-            const news: News[] = [];
-            aggregatedResult.news.forEach(
+            return aggregatedResult.news.map(
               (newsAPIResult: {
                 webTitle: string;
                 webPublicationDate: string | number | Date;
@@ -241,17 +238,16 @@ function useNews() {
                   id: newsAPIResult.fields.productionOffice.toLowerCase(),
                   name: `The Guardian ${newsAPIResult.fields.productionOffice}`,
                 };
-                news.push({
+                return {
                   title: newsAPIResult.webTitle,
                   createdAt: new Date(newsAPIResult.webPublicationDate),
                   author: newsAPIResult.fields.byline || "",
                   source: newSource,
                   url: newsAPIResult.fields.shortUrl || "",
                   image: newsAPIResult.fields.thumbnail || defaultImg,
-                });
+                };
               }
             );
-            return news;
           }
         }
 
@@ -297,8 +293,7 @@ function useNews() {
           }));
 
           if (aggregatedResult.news && aggregatedResult.news.length > 0) {
-            const news: News[] = [];
-            aggregatedResult.news.forEach(
+            return aggregatedResult.news.map(
               (newsAPIResult: {
                 source: string;
                 headline: { main: string };
@@ -313,7 +308,7 @@ function useNews() {
                   id: newsAPIResult.source,
                   name: newsAPIResult.source,
                 };
-                news.push({
+                return {
                   title: newsAPIResult.headline.main,
                   createdAt: new Date(newsAPIResult.pub_date),
                   author: newsAPIResult.byline.original
@@ -325,11 +320,9 @@ function useNews() {
                     newsAPIResult.multimedia.length > 0
                       ? `https://www.nytimes.com/${newsAPIResult.multimedia[0].url}`
                       : defaultImg,
-                });
+                };
               }
             );
-
-            return news;
           }
         }
 

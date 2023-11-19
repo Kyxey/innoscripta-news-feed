@@ -13,8 +13,8 @@ function urlFormatter(
     };
     filters: {
       date: {
-        from: Date | null;
-        to: Date | null;
+        from?: Date;
+        to?: Date;
       };
       category: string;
     };

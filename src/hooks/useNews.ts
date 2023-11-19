@@ -80,10 +80,7 @@ function useNews() {
 
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [searchQueryForKey, setSearchQueryForKey] = useState<string>("");
-  const [dateFilters, setDateFilters] = useState<DateFilters>({
-    from: null,
-    to: null,
-  });
+  const [dateFilters, setDateFilters] = useState<DateFilters>();
 
   const fetchSources = () => {
     const newsSource = newsSources["NewsAPI"];
@@ -140,8 +137,8 @@ function useNews() {
           },
           filters: {
             date: {
-              from: dateFilters.from,
-              to: dateFilters.to,
+              from: dateFilters?.from,
+              to: dateFilters?.to,
             },
             category: enabledCategoryNewsAPI,
           },
@@ -210,8 +207,8 @@ function useNews() {
           },
           filters: {
             date: {
-              from: dateFilters.from,
-              to: dateFilters.to,
+              from: dateFilters?.from,
+              to: dateFilters?.to,
             },
             category: enabledCategoryTheGuardian,
           },
@@ -282,8 +279,8 @@ function useNews() {
           },
           filters: {
             date: {
-              from: dateFilters.from,
-              to: dateFilters.to,
+              from: dateFilters?.from,
+              to: dateFilters?.to,
             },
             category: enabledCategoryNewYorkTimes,
           },
@@ -415,7 +412,7 @@ function useNews() {
     }
   };
 
-  const modifyDateFilters = (type: keyof DateFilters, newDate: Date | null) => {
+  const modifyDateFilters = (type: keyof DateFilters, newDate?: Date) => {
     const newDates: DateFilters = { ...dateFilters };
     newDates[type] = newDate;
     setDateFilters(newDates);

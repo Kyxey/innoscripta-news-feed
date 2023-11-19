@@ -57,14 +57,18 @@ function TopHeadlines() {
                 <div className="mb-2">
                   <label>From: </label>
                   <DatePicker
-                    selected={dateFilters.from}
+                    selected={dateFilters?.from}
                     placeholderText="Select a date..."
-                    onChange={(date) => modifyDateFilters("from", date)}
-                    onSelect={(date) => modifyDateFilters("from", date)}
+                    onChange={(date) =>
+                      modifyDateFilters("from", date || undefined)
+                    }
+                    onSelect={(date) =>
+                      modifyDateFilters("from", date || undefined)
+                    }
                     includeDateIntervals={[
                       {
                         start: new Date("1970/1/1"),
-                        end: dateFilters.to || new Date(),
+                        end: dateFilters?.to || new Date(),
                       },
                     ]}
                     className="bg-white text-left p-1 text-gray-600 border border-gray-400"
@@ -73,13 +77,17 @@ function TopHeadlines() {
                 <div>
                   <label>To: </label>
                   <DatePicker
-                    selected={dateFilters.to}
+                    selected={dateFilters?.to}
                     placeholderText="Select a date..."
-                    onChange={(date) => modifyDateFilters("to", date)}
-                    onSelect={(date) => modifyDateFilters("to", date)}
+                    onChange={(date) =>
+                      modifyDateFilters("to", date || undefined)
+                    }
+                    onSelect={(date) =>
+                      modifyDateFilters("to", date || undefined)
+                    }
                     includeDateIntervals={[
                       {
-                        start: dateFilters.from || new Date("1970/1/1"),
+                        start: dateFilters?.from || new Date("1970/1/1"),
                         end: new Date(),
                       },
                     ]}

@@ -19,8 +19,8 @@ type QueryStatus = {
 };
 
 type DateFilters = {
-  from: Date | null;
-  to: Date | null;
+  from?: Date;
+  to?: Date;
 };
 
 export type { Source, News, QueryStatus, DateFilters };

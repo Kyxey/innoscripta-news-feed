@@ -6,9 +6,9 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "lint": "npx eslint ./src --fix",
+    "lint": "eslint ./src --fix",
     "preview": "vite preview",
-    "format": "npx prettier --write ./src"
+    "format": "prettier --write ./src"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.8.4",
